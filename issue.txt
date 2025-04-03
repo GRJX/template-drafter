@@ -1,0 +1,28 @@
+Admin Dashboard: Overzicht voor Beheerders
+
+*ALS* Admin user,
+*WIL IK* een dashboard voor admin gebruikers maken.
+*ZODAT* Om efficiënter rapportages te kunnen genereren en beslissingen te nemen.
+
+*Probleem:*
+De beheerders hebben een dashboard nodig om cruciale gegevens en functionaliteiten overzichtelijk te kunnen zien en te beheren. Dit dashboard moet de efficiëntie van hun werkzaamheden verhogen.
+
+*Oplossing:*
+Een dashboard voor beheerders creëren, met overzichtelijke weergave van belangrijke data en functionaliteiten. Het dashboard moet gebruikers een efficiënt beheer van de applicatie mogelijk maken.
+
+*Afhankelijkheden:*
+
+
+*Acceptatiecriteria:*
+* De dashboard toont een overzicht van actieve gebruikers.
+* De dashboard toont het aantal recente bestellingen.
+* De dashboard toont een grafiek met omzet per dag/week/maand.
+* Admin gebruikers kunnen inloggen op de dashboard.
+* De dashboard toont een lijst met recente systeemmeldingen.
+* De dashboard is responsive en bruikbaar op verschillende schermformaten.
+* Story voldoet aan de [DoD|https://gitlab.dictuy.iesprd.ictu-sr.nl/ypsilon/docs/-/wikis/Scrum#definition-of-done].
+
+*Technische details: (optioneel)*
+* Documentatie: <fo_text>
+* <frontend_pagina's_links>
+* <backend_file_links>
