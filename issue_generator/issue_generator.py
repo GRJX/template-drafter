@@ -35,6 +35,7 @@ class IssueGenerator:
         """
         prompts = {
             "title": f"Create a brief, concise title (maximum 10 words) for this issue in Dutch. Only return the title without any explanation or additional text: {context}",
+            "label": f"Based on the issue context, select ONE of the following labels: 'LCM', 'ABLoket' (voor security, upgrades technische stack, migraties technische stack, policies), 'YpsilonBeheer' (voor Jenkins naar Gitlab, pipeline agents updaten, Renovate, Sonar, maven build cache), 'Functioneel', 'RobotFramework', or 'Templates'. Return ONLY the label name without any explanation: {context}",
             "stakeholder": f"Identify the stakeholder or end-user for this issue. Return ONLY the role or type of user, without any explanation, additional text, or formatting, in 1-3 words: {context}",
             "doel": f"Write a VERY concise statement in Dutch about what the user wants to accomplish (WIL IK part of the user story). Keep it under 15 words. Return only the statement without WIL IK, any explanation or formatting: {context}",
             "waarde": f"Write a VERY concise statement in Dutch about the business value or benefit (ZODAT part of the user story). Keep it under 15 words. Return only the statement without ZODAT, any explanation or formatting: {context}",
@@ -65,7 +66,7 @@ class IssueGenerator:
         # Generate content for each field
         issue_data = {}
         fields = [
-            "title", "stakeholder", "doel", "waarde", "huidige_situatie", 
+            "title", "label", "stakeholder", "doel", "waarde", "huidige_situatie", 
             "gewenste_situatie", "acceptatie_criteria"
         ]
         

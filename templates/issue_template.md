@@ -1,5 +1,7 @@
 {{ title }}
 
+Labels: {{ label }}
+
 *ALS* {{ stakeholder }},
 *WIL IK* {{ doel }}
 *ZODAT* {{ waarde }}

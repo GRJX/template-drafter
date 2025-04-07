@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--template", default="issue_template.md", help="Name of the template file")
     parser.add_argument("--template-dir", default="templates", help="Directory containing templates")
     parser.add_argument("--output", help="Output file (stdout if not specified)")
-    parser.add_argument("--model", default="gemma3:12b", help="Ollama model to use")
+    parser.add_argument("--model", default="gemma3:27b", help="Ollama model to use")
     
     args = parser.parse_args()
     
