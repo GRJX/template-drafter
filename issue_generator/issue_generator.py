@@ -2,7 +2,9 @@
 Issue generator module for creating issues from templates using AI.
 """
 
-from typing import Dict
+import json
+import os
+from typing import Dict, List, Any
 
 from .template_manager import TemplateManager
 from .ollama_client import OllamaClient
@@ -10,6 +12,16 @@ from .ollama_client import OllamaClient
 
 class IssueGenerator:
     """Generates issue descriptions from templates using AI."""
+    
+    EPIC_LABELS = [
+        "title", "epic_link", "label", "use_case", "actor", "functional_description",
+        "menu", "description", "pre_conditions", "bf_flow", "af_flow",
+        "success_conditions", "fail_conditions", "voorwaarden", "interfaces", "documents"
+        ]
+    STORY_LABELS = [
+        "title", "label", "stakeholder", "doel", "waarde", "huidige_situatie",
+        "gewenste_situatie", "acceptatie_criteria"
+        ]
     
     def __init__(self, template_manager: TemplateManager, ollama_client: OllamaClient):
         """
@@ -21,6 +33,113 @@ class IssueGenerator:
         """
         self.template_manager = template_manager
         self.ollama_client = ollama_client
+        self.prompts = self._load_prompts()
+    
+    def _load_prompts(self) -> Dict[str, str]:
+        """
+        Load prompts from the JSON configuration file.
+        
+        Returns:
+            Dictionary containing the prompt templates
+        """
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        prompts_path = os.path.join(script_dir, 'prompts-config.json')
+        
+        with open(prompts_path, 'r') as f:
+            return json.load(f)
+    
+    def generate_header(self, context: str, word_limit: int = 7, additional_info: str = '') -> str:
+        """
+        Generate a concise header/title with a limited number of words.
+        
+        Args:
+            context: User-provided context for the header
+            word_limit: Maximum number of words in the header (default: 7)
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Generated header as a string
+        """
+        prompt = f"""
+            Create a brief, concise title (maximum {word_limit} words) about this topic in Dutch. 
+
+            {additional_info}
+
+            Return without any additional text or punctuation. 
+
+            This is the context: {context}
+        """
+        
+        return self.ollama_client.generate_text(prompt)
+
+    def generate_sentence(self, context: str, word_limit: int = 50, additional_info: str = '') -> str:
+        """
+        Generate descriptive, functional, and clear sentences.
+        
+        Args:
+            context: User-provided context for the sentence
+            word_limit: Maximum number of words in the sentence (default: 50)
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Generated sentence as a string
+        """
+        prompt = f"""
+            Write a single clear and descriptive sentence(s) (maximum {word_limit} words) about this topic in Dutch. Make it functional and direct. 
+                
+            {additional_info}
+
+            Return without any explanation, additional text or newline characters.
+
+            This is the context: {context}
+        """
+        return self.ollama_client.generate_text(prompt)
+
+    def generate_bullets(self, context: str, bullet_limit: int = 5, additional_info: str = '') -> str:
+        """
+        Generate a list of bullet points.
+        
+        Args:
+            context: User-provided context for the bullet points
+            bullet_limit: Maximum number of bullet points to generate (default: 5)
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Generated bullet points as a string
+        """
+        prompt = f"""
+            Create a list of maximum {bullet_limit} bullet points about this topic in Dutch. 
+            
+            {additional_info}
+
+            Return only the bulleted list like: '* bullet item', without explanation, additional text or characters.
+
+            This is the context: {context}
+        """
+        return self.ollama_client.generate_text(prompt)
+
+    def select_from_list(self, context: str, options: List[str], additional_info: str = '') -> str:
+        """
+        Select a single item from a predefined list based on the context.
+        
+        Args:
+            context: User-provided context for the selection
+            options: List of options to choose from
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Selected item as a string
+        """
+        options_str = ", ".join([f"'{option}'" for option in options])
+        prompt = f"""
+            Select ONE of the following options: {options_str}. Return ONLY the selected option without the explanation 
+            between the brackets or additional text.
+            
+            {additional_info}
+
+            This is the context: {context}
+        """
+        return self.ollama_client.generate_text(prompt)
     
     def generate_issue_content(self, context: str, field: str) -> str:
         """
@@ -33,21 +152,54 @@ class IssueGenerator:
         Returns:
             Generated content for the field
         """
-        prompts = {
-            "title": f"Create a brief, concise title (maximum 10 words) for this issue in Dutch. Only return the title without any explanation or additional text: {context}",
-            "label": f"Based on the issue context, select ONE of the following labels: 'LCM', 'ABLoket' (voor security, upgrades technische stack, migraties technische stack, policies), 'YpsilonBeheer' (voor Jenkins naar Gitlab, pipeline agents updaten, Renovate, Sonar, maven build cache), 'Functioneel', 'RobotFramework', or 'Templates'. Return ONLY the label name without any explanation: {context}",
-            "stakeholder": f"Identify the stakeholder or end-user for this issue. Return ONLY the role or type of user, without any explanation, additional text, or formatting, in 1-3 words: {context}",
-            "doel": f"Write a VERY concise statement in Dutch about what the user wants to accomplish (WIL IK part of the user story). Keep it under 15 words. Return only the statement without WIL IK, any explanation or formatting: {context}",
-            "waarde": f"Write a VERY concise statement in Dutch about the business value or benefit (ZODAT part of the user story). Keep it under 15 words. Return only the statement without ZODAT, any explanation or formatting: {context}",
-            "huidige_situatie": f"Describe the current problem or situation in Dutch in 1-2 short sentences. Return only the description without any explanation or additional text: {context}",
-            "gewenste_situatie": f"Describe the desired solution in Dutch in 1-2 short sentences. Return only the description without any explanation or additional text: {context}",
-            "acceptatie_criteria": f"Generate 1-6 concise acceptance criteria for this issue. Format each item with an asterisk prefix. Return only the list in Dutch without any explanation or additional text: {context}"
-        }
-        
-        if field not in prompts:
+        if field not in self.prompts:
             raise ValueError(f"Unknown field: {field}")
         
-        return self.ollama_client.generate_text(prompts[field])
+        # Get the prompt configuration
+        prompt_config = self.prompts[field]
+        
+        # Check if the prompt has a type and use the appropriate generation function
+        if "type" in prompt_config:
+            generation_type = prompt_config["type"]
+            additional_info = prompt_config.get("additional_info", '')
+            
+            if generation_type == "header":
+                word_limit = prompt_config.get("args", {}).get("word_limit", 7)
+                return self.generate_header(context, word_limit, additional_info)
+            
+            elif generation_type == "sentence":
+                word_limit = prompt_config.get("args", {}).get("word_limit", 50)
+                return self.generate_sentence(context, word_limit, additional_info)
+            
+            elif generation_type == "bullets":
+                bullet_limit = prompt_config.get("args", {}).get("bullet_limit", 5)
+                return self.generate_bullets(context, bullet_limit, additional_info)
+            
+            elif generation_type == "selection":
+                options = prompt_config.get("args", {}).get("options", [])
+                if not options:
+                    raise ValueError("Options list is required for 'selection' generation type")
+                return self.select_from_list(context, options, additional_info)
+            
+            elif generation_type == "custom":
+                # For custom types, use the standard prompt approach
+                pass
+            
+            else:
+                raise ValueError(f"Unsupported generation type: {generation_type}")
+        
+        # Get the prompt template
+        prompt_template = prompt_config["prompt"]
+        
+        # Replace argument placeholders if present
+        if "args" in prompt_config:
+            for arg_name, arg_value in prompt_config["args"].items():
+                prompt_template = prompt_template.replace(f"{{{arg_name}}}", str(arg_value))
+        
+        # Replace the context placeholder
+        formatted_prompt = prompt_template.replace("{context}", context)
+        
+        return self.ollama_client.generate_text(formatted_prompt)
     
     def generate_full_issue(self, context: str, template_name: str) -> str:
         """
@@ -63,16 +215,35 @@ class IssueGenerator:
         # Load the template
         template_content = self.template_manager.load_template(template_name)
         
-        # Generate content for each field
-        issue_data = {}
-        fields = [
-            "title", "label", "stakeholder", "doel", "waarde", "huidige_situatie", 
-            "gewenste_situatie", "acceptatie_criteria"
-        ]
-        
-        for field in fields:
-            print(f"Generating {field}...")
-            issue_data[field] = self.generate_issue_content(context, field)
+        # Determine which fields to generate based on template type
+        if "epic_template" in template_name:            
+            # Generate standard fields
+            issue_data = {}
+            for field in self.EPIC_LABELS:
+                print(f"\033[94mGenerating {field}...\033[0m")
+                issue_data[field] = self.generate_issue_content(context, field)
+                            
+            # Generate and process basic flow steps
+            print("\033[94mGenerating basic flow steps...\033[0m")
+            bf_table_rows = self.generate_issue_content(context, "bf_table_rows")
+            issue_data.update(self._format_table_steps(bf_table_rows, "bf_table_rows"))
+            
+            # Generate and process alternative flow steps
+            print("\033[94mGenerating alternative flow steps...\033[0m")
+            af_table_rows = self.generate_issue_content(context, "af_table_rows")
+            issue_data.update(self._format_table_steps(af_table_rows, "af_table_rows"))
+            
+            # Generate and process business rules
+            print("\033[94mGenerating business rules...\033[0m")
+            business_rules = self.generate_issue_content(context, "business_rules")
+            issue_data.update(self._process_business_rules(business_rules))
+            
+        else:           
+            # Generate content for story fields
+            issue_data = {}
+            for field in self.STORY_LABELS:
+                print(f"\033[94mGenerating {field}...\033[0m")
+                issue_data[field] = self.generate_issue_content(context, field)
         
         # Render the template with the generated content
         return self.template_manager.render_template(template_content, issue_data)

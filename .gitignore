@@ -2,19 +2,10 @@
 .venv/
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.pdb
-*.egg-info/
-*.eggs/
-*.whl
-*.mypy_cache/
-*.pytest_cache/
 !README.md
 
 # Results file
 *.txt
-*.md
 
 # Node modules
 node_modules/

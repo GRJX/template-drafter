@@ -1,0 +1,182 @@
+{
+  "title": {
+    "type": "header",
+    "args": {
+      "word_limit": 10
+    }
+  },
+  "label": {
+    "type": "selection",
+    "args": {
+      "options": [
+        "LCM (Topics about Life Cycle Management)", 
+        "ABLoket (Topics that come from management, like: Upgraden techstack, migrate techstack, security, quality, policy, etc.)", 
+        "YpsilonBeheer (Topics about maintenance, support of the infrastructure and the applications)", 
+        "Functioneel (Topics about the functionality of the applications)", 
+        "RobotFramework (Topics related to any QA activities, like: RobotFramework, test automation, test cases, etc.)"
+      ]
+    }
+  },
+  "stakeholder": {
+    "type": "selection",
+    "args": {
+      "options": [
+        "Product Owner", 
+        "Ontwikkelaar", 
+        "Team Ypslion (If the issue is related to the whole scrum team)", 
+        "Tester", 
+        "ABLoket (If some other actor outside of the scrum team has the incentive)"
+      ]
+    }
+  },
+  "doel": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 15
+    },
+    "additional_info": "Make a VERY concise statement in one sentence about what the user wants to accomplish (WIL IK part of the user story). Return only the statement without WIL IK."
+  },
+  "waarde": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 15
+    },
+    "additional_info": "Make a VERY concise statement in one sentence about the business value or benefit (ZODAT part of the user story). Return only the statement without ZODAT."
+  },
+  "huidige_situatie": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 50
+    },
+    "additional_info": "Describe the current problem or situation that needs to be addressed (the WHY of the story) in 1-3 sentences."
+  },
+  "gewenste_situatie": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 50
+    },
+    "additional_info": "Describe the desired solution for the problem (the HOW of the story) in 1-3 sentences."
+  },
+  "acceptatie_criteria": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 6
+    },
+    "additional_info": "The list items are acceptance criteria."
+  },
+  "use_case": {
+    "type": "header",
+    "args": {
+      "word_limit": 4
+    },
+    "additional_info": "Write a short functional name for the use case in Dutch. Keep it under {word_limit} words without any explanation or additional text or dot: {context}"
+  },
+  "actor": {
+    "type": "selection",
+    "args": {
+      "options": ["Gemeente ambtenaar - rol Vraag", "Gemeente ambtenaar - rol Inkijk", "Gemeente ambtenaar - rol Specials", "BESEilanden", "Functional Beheerder", "Communicatie", "Beheerder Markeerverzoeken", "Beheerder ControleCodes", "Beheerder Zelfevaluatie", "Inkijken Gemeente Gegevens", "Monitoring"]
+    },
+    "additional_info": "Identify the primary actor/user who will be using this functionality. Choose between: Gemeente ambtenaar - rol Vraag (kan vragenlijst voor de eigen gemeente invullen, bijwerken en definitief maken, benchmark rapportages inzien en uittreksels uploaden), Inkijk (kan algemene gegevens van de gemeente, markeerverzoeken, openstaande onderzoeken, controleregels en inhoudelijke controles inzien), Specials (kan RPS-lijsten raadplegen), BESEilanden (zelfde als 'Gemeente ambtenaar - rol Vraag' alleen dan voor de BESEilanden), Functional Beheerder (), Communicatie, Beheerder Markeerverzoeken, Beheerder ControleCodes, Beheerder Zelfevaluatie, Inkijken Gemeente Gegevens, Monitoring. Return only the role name in Dutch without any explanation: {context}"
+  },
+  "functional_description": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 20
+    },
+    "additional_info": "Write a concise functional description of the desired functionality in Dutch (maximum {word_limit} words). Return only the description without explanation: {context}"
+  },
+  "menu": {
+    "type": "header",
+    "args": {
+      "word_limit": 5
+    },
+    "additional_info": "Identify which menu item in the application this functionality belongs to. Return only the menu item name in Dutch without explanation: {context}"
+  },
+  "description": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 60
+    },
+    "additional_info": "Write a detailed description of the epic in Dutch (2-3 sentences). Return only the description without any explanation: {context}"
+  },
+  "pre_conditions": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 4
+    },
+    "additional_info": "List 2-{bullet_limit} preconditions that must be met before this functionality can be used. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+  },
+  "bf_flow": {
+    "type": "header",
+    "args": {
+      "word_limit": 7
+    },
+    "additional_info": "Write a short name for the basic flow in Dutch ({word_limit} words): {context}"
+  },
+  "af_flow": {
+    "type": "header",
+    "args": {
+      "word_limit": 7
+    },
+    "additional_info": "Write a short name for an alternative flow in Dutch ({word_limit} words): {context}"
+  },
+  "success_conditions": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 3
+    },
+    "additional_info": "List 2-{bullet_limit} success conditions for this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+  },
+  "fail_conditions": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 2
+    },
+    "additional_info": "List 1-{bullet_limit} fail conditions for this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+  },
+  "business_rules": {
+    "type": "custom",
+    "args": {
+      "format": "json",
+      "item_limit": 3
+    },
+    "additional_info": "Generate 2-{item_limit} business rules or system constraints that apply to this epic. Format as JSON with 'number' and 'description' properties for each rule. Example: [{\"number\":\"BR001\",\"description\":\"Rule description\"}]. Return only the JSON array in Dutch: {context}"
+  },
+  "voorwaarden": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 3
+    },
+    "additional_info": "List 2-{bullet_limit} additional conditions or requirements. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+  },
+  "interfaces": {
+    "type": "sentence",
+    "args": {
+      "word_limit": 40
+    },
+    "additional_info": "Describe any logical interfaces to other applications (1-2 sentences). Return only the description in Dutch: {context}"
+  },
+  "documents": {
+    "type": "bullets",
+    "args": {
+      "bullet_limit": 5
+    },
+    "additional_info": "List any input or output documents related to this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+  },
+  "bf_table_rows": {
+    "type": "custom",
+    "args": {
+      "format": "json",
+      "item_limit": 5
+    },
+    "additional_info": "Generate 3-{item_limit} rows for a table representing the basic flow. Each row should include a step number, description, and any relevant details. Format as JSON with 'number', 'description', and 'details' properties for each row. Example: [{\"number\":1,\"description\":\"User logs in\",\"details\":\"User enters credentials\"}]. Return only the JSON array in Dutch: {context}"
+  },
+  "af_table_rows": {
+    "type": "custom",
+    "args": {
+      "format": "json",
+      "item_limit": 4
+    },
+    "additional_info": "Generate 2-{item_limit} rows for a table representing the alternative flow. Each row should include a step number, description, and any relevant details. Format as JSON with 'number', 'description', and 'details' properties for each row. Example: [{\"number\":1,\"description\":\"User logs in\",\"details\":\"User enters credentials\"}]. Return only the JSON array in Dutch: {context}"
+  }
+}
