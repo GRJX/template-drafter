@@ -4,6 +4,7 @@ Issue generator module for creating issues from templates using AI.
 
 import json
 import os
+import re
 from typing import Dict, List, Any
 
 from .template_manager import TemplateManager
@@ -12,16 +13,6 @@ from .ollama_client import OllamaClient
 
 class IssueGenerator:
     """Generates issue descriptions from templates using AI."""
-    
-    EPIC_LABELS = [
-        "title", "epic_link", "label", "use_case", "actor", "functional_description",
-        "menu", "description", "pre_conditions", "bf_flow", "af_flow",
-        "success_conditions", "fail_conditions", "voorwaarden", "interfaces", "documents"
-        ]
-    STORY_LABELS = [
-        "title", "label", "stakeholder", "doel", "waarde", "huidige_situatie",
-        "gewenste_situatie", "acceptatie_criteria"
-        ]
     
     def __init__(self, template_manager: TemplateManager, ollama_client: OllamaClient):
         """
@@ -47,6 +38,22 @@ class IssueGenerator:
         
         with open(prompts_path, 'r') as f:
             return json.load(f)
+    
+    def _extract_template_fields(self, template_content: str) -> List[str]:
+        """
+        Extract fields (placeholders) from a template file.
+        
+        Args:
+            template_content: The content of the template file
+            
+        Returns:
+            List of field names extracted from the template
+        """
+        # Regular expression to find all placeholders like {{ field_name }}
+        fields = re.findall(r'{{\s*(\w+)\s*}}', template_content)
+        
+        # Return unique field names
+        return list(set(fields))
     
     def generate_header(self, context: str, word_limit: int = 7, additional_info: str = '') -> str:
         """
@@ -215,35 +222,47 @@ class IssueGenerator:
         # Load the template
         template_content = self.template_manager.load_template(template_name)
         
-        # Determine which fields to generate based on template type
-        if "epic_template" in template_name:            
-            # Generate standard fields
-            issue_data = {}
-            for field in self.EPIC_LABELS:
-                print(f"\033[94mGenerating {field}...\033[0m")
+        # Extract fields from the template
+        fields = self._extract_template_fields(template_content)
+        
+        # Generate content for each field
+        issue_data = {}
+        
+        # Check if this is an epic template to handle special cases
+        is_epic_template = "epic_template" in template_name
+        
+        # Generate standard fields first
+        for field in fields:
+            # Skip special handling fields for epics that will be processed separately
+            if is_epic_template and field in ["bf_table_rows", "af_table_rows", "business_rules"]:
+                continue
+                
+            print(f"\033[94mGenerating {field}...\033[0m")
+            try:
                 issue_data[field] = self.generate_issue_content(context, field)
-                            
+            except ValueError as e:
+                print(f"\033[93mWarning: Could not generate content for {field}: {str(e)}\033[0m")
+                issue_data[field] = f"<!-- Missing content for {field} -->"
+        
+        # For epic templates, handle special cases
+        if is_epic_template:
             # Generate and process basic flow steps
-            print("\033[94mGenerating basic flow steps...\033[0m")
-            bf_table_rows = self.generate_issue_content(context, "bf_table_rows")
-            issue_data.update(self._format_table_steps(bf_table_rows, "bf_table_rows"))
+            if "bf_table_rows" in fields:
+                print("\033[94mGenerating basic flow steps...\033[0m")
+                bf_table_rows = self.generate_issue_content(context, "bf_table_rows")
+                issue_data.update(self._format_table_steps(bf_table_rows, "bf_table_rows"))
             
             # Generate and process alternative flow steps
-            print("\033[94mGenerating alternative flow steps...\033[0m")
-            af_table_rows = self.generate_issue_content(context, "af_table_rows")
-            issue_data.update(self._format_table_steps(af_table_rows, "af_table_rows"))
+            if "af_table_rows" in fields:
+                print("\033[94mGenerating alternative flow steps...\033[0m")
+                af_table_rows = self.generate_issue_content(context, "af_table_rows")
+                issue_data.update(self._format_table_steps(af_table_rows, "af_table_rows"))
             
             # Generate and process business rules
-            print("\033[94mGenerating business rules...\033[0m")
-            business_rules = self.generate_issue_content(context, "business_rules")
-            issue_data.update(self._process_business_rules(business_rules))
-            
-        else:           
-            # Generate content for story fields
-            issue_data = {}
-            for field in self.STORY_LABELS:
-                print(f"\033[94mGenerating {field}...\033[0m")
-                issue_data[field] = self.generate_issue_content(context, field)
+            if "business_rules" in fields:
+                print("\033[94mGenerating business rules...\033[0m")
+                business_rules = self.generate_issue_content(context, "business_rules")
+                issue_data.update(self._process_business_rules(business_rules))
         
         # Render the template with the generated content
         return self.template_manager.render_template(template_content, issue_data)

@@ -20,7 +20,7 @@ def main():
     
     args = parser.parse_args()
     
-    print(f"\033[94mInitializing issue generator with model: {args.model}\033[0m")
+    print(f"\033[90mInitializing issue generator with model: {args.model}\033[0m")
     
     # Set template based on issue type
     template_name = f"{args.type}_template.md"
