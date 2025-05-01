@@ -23,8 +23,8 @@ class OllamaClient:
     
     def generate_text(self, prompt: str, max_tokens: int = 300, 
                       temperature: float = 0.1, top_p: float = 0.1, 
-                      top_k: int = 10, presence_penalty: float = 0.3,
-                      frequency_penalty: float = 0.3) -> str:
+                      top_k: int = 20, presence_penalty: float = 0.1,
+                      frequency_penalty: float = 0.1) -> str:
         """
         Generate text using Ollama.
         

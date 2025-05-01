@@ -119,7 +119,7 @@ class IssueGenerator:
             
             {additional_info}
 
-            Return only the bulleted list like: '* bullet item', without explanation, additional text or characters.
+            Return only the bulleted list like: '* bullet item', without explanation, additional text or special characters.
 
             This is the context: {context}
         """
@@ -147,7 +147,45 @@ class IssueGenerator:
             This is the context: {context}
         """
         return self.ollama_client.generate_text(prompt)
-    
+
+    def generate_flows(self, context: str, flow_limit: int = 2, additional_info: str = '') -> str:
+        """
+        Generate Basic Flow (BF) events with numbered steps.
+        
+        Args:
+            context: User-provided context for the basic flows
+            flow_limit: Maximum number of flows to generate (default: 2)
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Generated basic flow events as a structured string
+        """
+        prompt = f"""
+            Use the following structure for the flow events:
+
+            *{{abbreviation}}{{n}}: {{short, action-based title in Dutch}}*
+            ||Step||Omschrijving||
+            |1|{{first actor action or system response}}|
+            |2|{{next step}}|
+            ...
+
+            {additional_info}
+
+            Rules:
+            - Generate {flow_limit} flows
+            - Each new flow starts with flow title {{abbreviation}}{{n}}: {{title}}.
+            - Title: short, action-based, in Dutch.
+            - Steps: alternate between actor actions and system responses in Dutch.
+            - Number steps starting from 1 in each flow.
+            - The header rows are 'Step' and 'Omschrijving'.
+            - Use || for headers and | for rows.
+            - Write only the formatted tabel output with newlines, no extra text, characters or code blocks.
+
+            This is the context: {context}
+        """
+        
+        return self.ollama_client.generate_text(prompt)
+
     def generate_issue_content(self, context: str, field: str) -> str:
         """
         Generate content for a specific field of an issue.
@@ -188,9 +226,9 @@ class IssueGenerator:
                     raise ValueError("Options list is required for 'selection' generation type")
                 return self.select_from_list(context, options, additional_info)
             
-            elif generation_type == "custom":
-                # For custom types, use the standard prompt approach
-                pass
+            elif generation_type == "flows":
+                flow_limit = prompt_config.get("args", {}).get("flow_limit", 50)
+                return self.generate_flows(context, flow_limit, additional_info)
             
             else:
                 raise ValueError(f"Unsupported generation type: {generation_type}")
@@ -228,41 +266,14 @@ class IssueGenerator:
         # Generate content for each field
         issue_data = {}
         
-        # Check if this is an epic template to handle special cases
-        is_epic_template = "epic_template" in template_name
-        
         # Generate standard fields first
         for field in fields:
-            # Skip special handling fields for epics that will be processed separately
-            if is_epic_template and field in ["bf_table_rows", "af_table_rows", "business_rules"]:
-                continue
-                
             print(f"\033[94mGenerating {field}...\033[0m")
             try:
                 issue_data[field] = self.generate_issue_content(context, field)
             except ValueError as e:
                 print(f"\033[93mWarning: Could not generate content for {field}: {str(e)}\033[0m")
                 issue_data[field] = f"<!-- Missing content for {field} -->"
-        
-        # For epic templates, handle special cases
-        if is_epic_template:
-            # Generate and process basic flow steps
-            if "bf_table_rows" in fields:
-                print("\033[94mGenerating basic flow steps...\033[0m")
-                bf_table_rows = self.generate_issue_content(context, "bf_table_rows")
-                issue_data.update(self._format_table_steps(bf_table_rows, "bf_table_rows"))
-            
-            # Generate and process alternative flow steps
-            if "af_table_rows" in fields:
-                print("\033[94mGenerating alternative flow steps...\033[0m")
-                af_table_rows = self.generate_issue_content(context, "af_table_rows")
-                issue_data.update(self._format_table_steps(af_table_rows, "af_table_rows"))
-            
-            # Generate and process business rules
-            if "business_rules" in fields:
-                print("\033[94mGenerating business rules...\033[0m")
-                business_rules = self.generate_issue_content(context, "business_rules")
-                issue_data.update(self._process_business_rules(business_rules))
         
         # Render the template with the generated content
         return self.template_manager.render_template(template_content, issue_data)

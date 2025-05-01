@@ -1,5 +1,5 @@
 {
-  "title": {
+  "titel": {
     "type": "header",
     "args": {
       "word_limit": 10
@@ -69,114 +69,97 @@
     "args": {
       "word_limit": 4
     },
-    "additional_info": "Write a short functional name for the use case in Dutch. Keep it under {word_limit} words without any explanation or additional text or dot: {context}"
+    "additional_info": "Write a short functional name for the use case in Dutch."
   },
   "actor": {
     "type": "selection",
     "args": {
       "options": ["Gemeente ambtenaar - rol Vraag", "Gemeente ambtenaar - rol Inkijk", "Gemeente ambtenaar - rol Specials", "BESEilanden", "Functional Beheerder", "Communicatie", "Beheerder Markeerverzoeken", "Beheerder ControleCodes", "Beheerder Zelfevaluatie", "Inkijken Gemeente Gegevens", "Monitoring"]
     },
-    "additional_info": "Identify the primary actor/user who will be using this functionality. Choose between: Gemeente ambtenaar - rol Vraag (kan vragenlijst voor de eigen gemeente invullen, bijwerken en definitief maken, benchmark rapportages inzien en uittreksels uploaden), Inkijk (kan algemene gegevens van de gemeente, markeerverzoeken, openstaande onderzoeken, controleregels en inhoudelijke controles inzien), Specials (kan RPS-lijsten raadplegen), BESEilanden (zelfde als 'Gemeente ambtenaar - rol Vraag' alleen dan voor de BESEilanden), Functional Beheerder (), Communicatie, Beheerder Markeerverzoeken, Beheerder ControleCodes, Beheerder Zelfevaluatie, Inkijken Gemeente Gegevens, Monitoring. Return only the role name in Dutch without any explanation: {context}"
+    "additional_info": "Identify the primary actor/user who will be using this functionality. Multiple actors can be selected."
   },
-  "functional_description": {
+  "korte_omschrijving": {
     "type": "sentence",
     "args": {
       "word_limit": 20
     },
-    "additional_info": "Write a concise functional description of the desired functionality in Dutch (maximum {word_limit} words). Return only the description without explanation: {context}"
+    "additional_info": "Write a concise functional description."
   },
-  "menu": {
-    "type": "header",
+  "menu_item": {
+    "type": "selection",
     "args": {
-      "word_limit": 5
+      "options": ["Home (Algemene informatie, zoals toelichting, Nieuwsberichten, Vragen, FAQ zelfevaluatie)", "Gegevens (In te vullen door gemeentes, zoals bevindingen, Markeerverzoeken, Overzicht controleregels, Inhoudelijk controle persoonslijsten, Wijzigingsverzoeken RNI, Bestanden downloaden, History, FAQ Controles, RPS)", "Processen (Informatie  over ingevulde gegevens)" , "Vragenlijsten (Het beantwoorden van vragenlijsten, definitief maken van managementrapportages)", "Uploaden (Ondertekende documenten zoals vragenlijsten uploaden)", "Benchmark (Statistieken over bestandscontrole en overige onderzoeken)", "Specials (RPS-ijst, Protocollering, Selectiebestanden)", "Monitoring (Overzicht vragenlijsten en inhoudelijke controle, overzicht uploaden status, totaaloverzichten vragenlijsten en inhoudelijke controle)", "Beheer (Schemteksten, Vragenlijsten beheren, Zelfevaluaties, Markeerverzoeken, Inhoudelijke controle, Wijzigingsverzoeken RNI, Configuraties, ENSIA importeren)"]
     },
-    "additional_info": "Identify which menu item in the application this functionality belongs to. Return only the menu item name in Dutch without explanation: {context}"
+    "additional_info": "Identify which menu item in the application this functionality belongs to."
   },
-  "description": {
+  "lange_omschrijving": {
     "type": "sentence",
     "args": {
-      "word_limit": 60
+      "word_limit": 120
     },
-    "additional_info": "Write a detailed description of the epic in Dutch (2-3 sentences). Return only the description without any explanation: {context}"
+    "additional_info": "The detailed description should be from a users perspective of the epic in 2-8 sentences."
   },
-  "pre_conditions": {
+  "precondities": {
     "type": "bullets",
     "args": {
       "bullet_limit": 4
     },
-    "additional_info": "List 2-{bullet_limit} preconditions that must be met before this functionality can be used. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+    "additional_info": "The list items are preconditions from a users perspective that must be met before this functionality can be used with the application."
   },
-  "bf_flow": {
-    "type": "header",
-    "args": {
-      "word_limit": 7
-    },
-    "additional_info": "Write a short name for the basic flow in Dutch ({word_limit} words): {context}"
-  },
-  "af_flow": {
-    "type": "header",
-    "args": {
-      "word_limit": 7
-    },
-    "additional_info": "Write a short name for an alternative flow in Dutch ({word_limit} words): {context}"
-  },
-  "success_conditions": {
+  "succescondities": {
     "type": "bullets",
     "args": {
       "bullet_limit": 3
     },
-    "additional_info": "List 2-{bullet_limit} success conditions for this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+    "additional_info": "The list items are success conditions from a users perspective for this epic."
   },
-  "fail_conditions": {
+  "faalcondities": {
     "type": "bullets",
     "args": {
-      "bullet_limit": 2
+      "bullet_limit": 3
     },
-    "additional_info": "List 1-{bullet_limit} fail conditions for this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
-  },
-  "business_rules": {
-    "type": "custom",
-    "args": {
-      "format": "json",
-      "item_limit": 3
-    },
-    "additional_info": "Generate 2-{item_limit} business rules or system constraints that apply to this epic. Format as JSON with 'number' and 'description' properties for each rule. Example: [{\"number\":\"BR001\",\"description\":\"Rule description\"}]. Return only the JSON array in Dutch: {context}"
+    "additional_info": "The list items are fail conditions from a users perspective for this epic."
   },
   "voorwaarden": {
     "type": "bullets",
     "args": {
       "bullet_limit": 3
     },
-    "additional_info": "List 2-{bullet_limit} additional conditions or requirements. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+    "additional_info": "The list items are conditions or requirements about the stack being or conventions being used."
   },
   "interfaces": {
     "type": "sentence",
     "args": {
       "word_limit": 40
     },
-    "additional_info": "Describe any logical interfaces to other applications (1-2 sentences). Return only the description in Dutch: {context}"
+    "additional_info": "Describe any logical interfaces to other applications, systems, API's or databases."
   },
-  "documents": {
+  "documenten": {
     "type": "bullets",
     "args": {
-      "bullet_limit": 5
+      "bullet_limit": 3
     },
-    "additional_info": "List any input or output documents related to this epic. Format as bullet points with asterisks. Return only the list in Dutch: {context}"
+    "additional_info": "The list items are documents to download or upload from a users perspective."
   },
-  "bf_table_rows": {
-    "type": "custom",
+  "basic_flow": {
+    "type": "flows",
     "args": {
-      "format": "json",
-      "item_limit": 5
+      "flow_limit": 2
     },
-    "additional_info": "Generate 3-{item_limit} rows for a table representing the basic flow. Each row should include a step number, description, and any relevant details. Format as JSON with 'number', 'description', and 'details' properties for each row. Example: [{\"number\":1,\"description\":\"User logs in\",\"details\":\"User enters credentials\"}]. Return only the JSON array in Dutch: {context}"
+    "additional_info": "The flow is about the basic flow (happy cases). Use abbreviation BF."
   },
-  "af_table_rows": {
-    "type": "custom",
+  "alternative_flow": {
+    "type": "flows",
     "args": {
-      "format": "json",
-      "item_limit": 4
+      "flow_limit": 4
     },
-    "additional_info": "Generate 2-{item_limit} rows for a table representing the alternative flow. Each row should include a step number, description, and any relevant details. Format as JSON with 'number', 'description', and 'details' properties for each row. Example: [{\"number\":1,\"description\":\"User logs in\",\"details\":\"User enters credentials\"}]. Return only the JSON array in Dutch: {context}"
+    "additional_info": "The flow is about the alternative flows (unhappy cases). Use abbreviation AF."
+  },
+  "business_rules": {
+    "type": "flows",
+    "args": {
+      "flow_limit": 4
+    },
+    "additional_info": "Use the headers: Referentie systeemregels and Omschrijving. The Referentie systeemregels are numbered by BR0001."
   }
 }

@@ -1,41 +1,36 @@
-{{ title }}
+{{ titel }}
 
 Labels: {{ label }}
 
 ||Use Case (naam)||Actor||Korte omschrijving (gewenste functionaliteit)||Menu-item||
-|{{ use_case }}|{{ actor }}|{{ functional_description }}|{{ menu }}
+|{{ use_case }}|{{ actor }}|{{ korte_omschrijving }}|{{ menu_item }}|
  
 h3. Samenvatting
 h4. Korte omschrijving
-{{ description }}
+{{ lange_omschrijving }}
 
 h4. Actor
 {{ actor }} 
 
 h3. Precondities
-{{ pre_conditions }}
+{{ precondities }}
 
 h3. Flows
 h4. Basic Flow (BF) of Events
-*BF1: {{ bf_flow }}*
-||Step||Omschrijving||
-{{ bf_table_rows }}
+{{ basic_flow }}
 
 h4. Alternative Flows (AF)
-*AF1: {{ af_flow }}*
-||Step||Omschrijving||
-{{ af_table_rows }}
+{{ alternative_flow }}
 
 h3. Resultaat
 h4. Succescondities
-{{ success_conditions }}
+{{ succescondities }}
 
 h4. Faalcondities
-{{ fail_conditions }}
+{{ faalcondities }}
 
 h3. Controles en regels
-||Referentie systeemregels||Omschrijving||
-{{ business_rules_rows }}
+{{ business_rules}}
 
 h3. Aanvullende eisen
 h4. Voorwaarden
@@ -46,4 +41,4 @@ h4. Logische interfaces (naar andere applicaties)
 
 h3. Logische omschrijving
 h4. Input- en outputdocumenten
-{{ documents }}
+* <input_outputdocumenten>
