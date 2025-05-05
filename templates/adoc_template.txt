@@ -1,0 +1,42 @@
+*Use Case (naam):* {{ use_case }} +
+*Actor:* {{ actor }} +
+*Korte omschrijving (gewenste functionaliteit):* {{ korte_omschrijving }} +
+*Menu-item:* {{ menu_item }} +
+ 
+=== Samenvatting
+==== Korte omschrijving
+{{ lange_omschrijving }}
+
+==== Actor
+{{ actor }} 
+
+=== Precondities
+{{ precondities }}
+
+=== Flows
+==== Basic Flow (BF) of Events
+{{ basic_flow }}
+
+==== Alternative Flows (AF)
+{{ alternative_flow }}
+
+=== Postcondities
+==== Succescondities
+{{ succescondities }}
+
+==== Faalcondities
+{{ faalcondities }}
+
+=== Controles en regels
+{{ business_rules}}
+
+=== Aanvullende eisen
+==== Voorwaarden
+{{ voorwaarden }}
+
+==== Logische interfaces (naar andere applicaties)
+{{ interfaces }}
+
+=== Logische omschrijving
+==== Input- en outputdocumenten
+- <input_outputdocumenten> +

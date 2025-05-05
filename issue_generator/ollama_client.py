@@ -10,16 +10,19 @@ import time
 class OllamaClient:
     """Client for interacting with Ollama API."""
     
-    def __init__(self, base_url: str = "http://localhost:11434", model: str = "gemma3:12b"):
+    def __init__(self, base_url: str = "http://localhost:11434", model: str = "gemma3:12b", 
+                 system_prompt: str = "You are a helpful AI assistant."):
         """
         Initialize the Ollama client.
         
         Args:
             base_url: Base URL for the Ollama API
             model: Ollama model to use
+            system_prompt: The system prompt to guide the AI model
         """
         self.base_url = base_url
         self.model = model
+        self.system_prompt = system_prompt
     
     def generate_text(self, prompt: str, max_tokens: int = 300, 
                       temperature: float = 0.1, top_p: float = 0.1, 
@@ -53,6 +56,7 @@ class OllamaClient:
             payload = {
                 "model": self.model,
                 "prompt": cleaned_prompt,
+                "system": self.system_prompt, # Use the stored system prompt
                 "max_tokens": max_tokens,
                 "temperature": temperature,
                 "top_p": top_p,

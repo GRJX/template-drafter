@@ -2,8 +2,10 @@
 
 Labels: {{ label }}
 
-||Use Case (naam)||Actor||Korte omschrijving (gewenste functionaliteit)||Menu-item||
-|{{ use_case }}|{{ actor }}|{{ korte_omschrijving }}|{{ menu_item }}|
+Use Case (naam): {{ use_case }}
+Actor: {{ actor }}
+Korte omschrijving (gewenste functionaliteit): {{ korte_omschrijving }}
+Menu-item: {{ menu_item }}
  
 h3. Samenvatting
 h4. Korte omschrijving
