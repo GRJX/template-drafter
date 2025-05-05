@@ -22,7 +22,7 @@ h4. Basic Flow (BF) of Events
 h4. Alternative Flows (AF)
 {{ alternative_flow }}
 
-h3. Resultaat
+h3. Postcondities
 h4. Succescondities
 {{ succescondities }}
 

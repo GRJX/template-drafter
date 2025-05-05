@@ -68,11 +68,14 @@ class IssueGenerator:
             Generated header as a string
         """
         prompt = f"""
-            Create a brief, concise title (maximum {word_limit} words) about this topic in Dutch. 
+            Create a brief, concise title.
 
-            {additional_info}
+            Additional information that overrules the rules if contradicting: {additional_info}
 
-            Return without any additional text or punctuation. 
+            Rules:
+            - The result should be in Dutch.
+            - Maximum {word_limit} words.
+            - Return without any additional text or punctuation.
 
             This is the context: {context}
         """
@@ -92,11 +95,15 @@ class IssueGenerator:
             Generated sentence as a string
         """
         prompt = f"""
-            Write a single clear and descriptive sentence(s) (maximum {word_limit} words) about this topic in Dutch. Make it functional and direct. 
-                
-            {additional_info}
+            Write a single clear and descriptive sentence(s) about the topic. 
 
-            Return without any explanation, additional text or newline characters.
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - The result should be in Dutch.
+            - The sentence should be functional and direct.
+            - Maximum {word_limit} words.
+            - Return without any explanation, additional text or newline characters.
 
             This is the context: {context}
         """
@@ -115,11 +122,14 @@ class IssueGenerator:
             Generated bullet points as a string
         """
         prompt = f"""
-            Create a list of maximum {bullet_limit} bullet points about this topic in Dutch. 
+            Create a list of bullet points. 
             
-            {additional_info}
+            Additional information that overrules the rules if contradicting: {additional_info}
 
-            Return only the bulleted list like: '* bullet item', without explanation, additional text or special characters.
+            Rules:
+            - Maximum {bullet_limit} bullet points.
+            - Bullet format: '* bullet_item'.
+            - Return without any explanation, additional text or special characters beyond the bullet format.
 
             This is the context: {context}
         """
@@ -139,16 +149,22 @@ class IssueGenerator:
         """
         options_str = ", ".join([f"'{option}'" for option in options])
         prompt = f"""
-            Select ONE of the following options: {options_str}. Return ONLY the selected option without the explanation 
-            between the brackets or additional text.
+            Select ONE option from the provided list.
             
-            {additional_info}
+            Available options: {options_str}
 
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - Return ONLY the selected option.
+            - Remove the information between brackets.
+            - Return without any explanation or additional text.
+            
             This is the context: {context}
         """
         return self.ollama_client.generate_text(prompt)
 
-    def generate_flows(self, context: str, flow_limit: int = 2, additional_info: str = '') -> str:
+    def generate_tables(self, context: str, table_limit: int = 1, table_title: str = '', table_headers: list = [], additional_info: str = '') -> str:
         """
         Generate Basic Flow (BF) events with numbered steps.
         
@@ -161,25 +177,17 @@ class IssueGenerator:
             Generated basic flow events as a structured string
         """
         prompt = f"""
-            Use the following structure for the flow events:
+            Create a table.
 
-            *{{abbreviation}}{{n}}: {{short, action-based title in Dutch}}*
-            ||Step||Omschrijving||
-            |1|{{first actor action or system response}}|
-            |2|{{next step}}|
-            ...
-
-            {additional_info}
+            Additional information that overrule the rules if contradicting: {additional_info}
 
             Rules:
-            - Generate {flow_limit} flows
-            - Each new flow starts with flow title {{abbreviation}}{{n}}: {{title}}.
-            - Title: short, action-based, in Dutch.
-            - Steps: alternate between actor actions and system responses in Dutch.
-            - Number steps starting from 1 in each flow.
-            - The header rows are 'Step' and 'Omschrijving'.
-            - Use || for headers and | for rows.
-            - Write only the formatted tabel output with newlines, no extra text, characters or code blocks.
+            - Generate {table_limit} tables.
+            - Table text is in Dutch.
+            - Table tile is short, action-based and in format: {table_title}. If empty or not provided, don't generate a title'.
+            - Table headers are: {table_headers} in the format '||header1||header2||...||'.
+            - Table rows are in the format '|row1|row2|...|'.
+            - Return only the title and table output, no extra text, characters or code blocks.
 
             This is the context: {context}
         """
@@ -226,9 +234,12 @@ class IssueGenerator:
                     raise ValueError("Options list is required for 'selection' generation type")
                 return self.select_from_list(context, options, additional_info)
             
-            elif generation_type == "flows":
-                flow_limit = prompt_config.get("args", {}).get("flow_limit", 50)
-                return self.generate_flows(context, flow_limit, additional_info)
+            elif generation_type == "tables":
+                table_limit = prompt_config.get("args", {}).get("table_limit", 1)
+                table_title = prompt_config.get("args", {}).get("table_title", "Table1: <title>")
+                table_headers = prompt_config.get("args", {}).get("table_headers", ["Steps", "Description"])
+                
+                return self.generate_tables(context, table_limit, table_title, table_headers, additional_info)
             
             else:
                 raise ValueError(f"Unsupported generation type: {generation_type}")

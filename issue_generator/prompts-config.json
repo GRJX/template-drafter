@@ -69,7 +69,7 @@
     "args": {
       "word_limit": 4
     },
-    "additional_info": "Write a short functional name for the use case in Dutch."
+    "additional_info": "Write a short action-based name for the use case."
   },
   "actor": {
     "type": "selection",
@@ -142,24 +142,29 @@
     "additional_info": "The list items are documents to download or upload from a users perspective."
   },
   "basic_flow": {
-    "type": "flows",
+    "type": "tables",
     "args": {
-      "flow_limit": 2
+      "table_limit": 2,
+      "table_title": "<abbreviation><n>: <title>",
+      "table_headers": ["Step", "Omschrijving"]
     },
-    "additional_info": "The flow is about the basic flow (happy cases). Use abbreviation BF."
+    "additional_info": "The flow is about the basic flow (happy cases). Use abbreviation BF. Steps: alternate between actor actions and system responses for the 'Omschrijving' column. Number steps starting from 1 in the 'Step' column for each flow."
   },
   "alternative_flow": {
-    "type": "flows",
+    "type": "tables",
     "args": {
-      "flow_limit": 4
+      "table_limit": 4,
+      "table_title": "<abbreviation><n>: <title>",
+      "table_headers": ["Step", "Omschrijving"]
     },
-    "additional_info": "The flow is about the alternative flows (unhappy cases). Use abbreviation AF."
+    "additional_info": "The flow is about the alternative flows (unhappy cases). Use abbreviation AF. Steps: alternate between actor actions and system responses for the 'Omschrijving' column. Number steps starting from 1 in the 'Step' column for each flow."
   },
   "business_rules": {
-    "type": "flows",
+    "type": "tables",
     "args": {
-      "flow_limit": 4
+      "table_limit": 1,
+      "table_headers": ["Referentie systeemregels", "Omschrijving"]
     },
-    "additional_info": "Use the headers: Referentie systeemregels and Omschrijving. The Referentie systeemregels are numbered by BR0001."
+    "additional_info": "Create rules about the security, accessability en usability. Referentie systeemregels: are numbered like BR<n>, where <n> is representing 4 digits."
   }
 }
