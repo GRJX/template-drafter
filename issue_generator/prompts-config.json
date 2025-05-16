@@ -190,6 +190,13 @@
         "table_headers": ["Referentie systeemregels", "Omschrijving"]
       },
       "additional_info": "Create rules about the security, accessability en usability. Referentie systeemregels: are numbered like BR<n>, where <n> is representing 4 digits."
+    },
+    "handleiding": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 1000
+      },
+      "additional_info": "Use an instructional and structured tone suitable for a README file. Include headings where appropriate (e.g., Installation, Usage) and format using Markdown syntax. Use plain language and imperative verbs. Do not add unnecessary explanation or commentary."
     }
   }
 }

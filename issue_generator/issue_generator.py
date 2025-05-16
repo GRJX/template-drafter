@@ -112,7 +112,7 @@ class IssueGenerator:
          # Define format-specific rules
         if self.output_format == 'adoc':
             bullet_format = "Bullet format: '- <bullet_item> +'."
-        else: # Default to Markdown
+        else: # Default to Jira
             bullet_format = "Bullet format: '* <bullet_item>'."
         
         prompt = f"""
