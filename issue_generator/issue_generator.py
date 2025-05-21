@@ -14,31 +14,20 @@ from .ollama_client import OllamaClient
 class IssueGenerator:
     """Generates issue descriptions from templates using AI."""
     
-    def __init__(self, template_manager: TemplateManager, ollama_client: OllamaClient):
+    def __init__(self, template_manager: TemplateManager, ollama_client: OllamaClient, output_format: str = 'jira'):
         """
         Initialize the IssueGenerator.
         
         Args:
             template_manager: Manager for loading and rendering templates
-            ollama_client: Client for generating text with Ollama
+            ollama_client: Pre-initialized client for generating text with Ollama
+            output_format: The desired output format ('jira' or 'adoc')
         """
         self.template_manager = template_manager
         self.ollama_client = ollama_client
-        self.prompts = self._load_prompts()
-    
-    def _load_prompts(self) -> Dict[str, str]:
-        """
-        Load prompts from the JSON configuration file.
-        
-        Returns:
-            Dictionary containing the prompt templates
-        """
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        prompts_path = os.path.join(script_dir, 'prompts-config.json')
-        
-        with open(prompts_path, 'r') as f:
-            return json.load(f)
-    
+        self.prompts = self.template_manager.get_template_prompts()
+        self.output_format = output_format
+
     def _extract_template_fields(self, template_content: str) -> List[str]:
         """
         Extract fields (placeholders) from a template file.
@@ -68,11 +57,13 @@ class IssueGenerator:
             Generated header as a string
         """
         prompt = f"""
-            Create a brief, concise title (maximum {word_limit} words) about this topic in Dutch. 
+            Create a brief, concise title.
 
-            {additional_info}
+            Additional information that overrules the rules if contradicting: {additional_info}
 
-            Return without any additional text or punctuation. 
+            Rules:
+            - Maximum {word_limit} words.
+            - Return without any additional text or punctuation.
 
             This is the context: {context}
         """
@@ -92,11 +83,14 @@ class IssueGenerator:
             Generated sentence as a string
         """
         prompt = f"""
-            Write a single clear and descriptive sentence(s) (maximum {word_limit} words) about this topic in Dutch. Make it functional and direct. 
-                
-            {additional_info}
+            Write clear and descriptive sentence(s) about the topic.
 
-            Return without any explanation, additional text or newline characters.
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - The sentence should be functional and direct.
+            - Maximum {word_limit} words.
+            - Return without any explanation, additional text or newline characters.
 
             This is the context: {context}
         """
@@ -114,12 +108,22 @@ class IssueGenerator:
         Returns:
             Generated bullet points as a string
         """
-        prompt = f"""
-            Create a list of maximum {bullet_limit} bullet points about this topic in Dutch. 
-            
-            {additional_info}
 
-            Return only the bulleted list like: '* bullet item', without explanation, additional text or special characters.
+         # Define format-specific rules
+        if self.output_format == 'adoc':
+            bullet_format = "Bullet format: '- <bullet_item> +'."
+        else: # Default to Jira
+            bullet_format = "Bullet format: '* <bullet_item>'."
+        
+        prompt = f"""
+            Create a list of bullet points. 
+            
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - Maximum {bullet_limit} bullet points.
+            - {bullet_format}
+            - Return without any explanation, additional text or special characters beyond the bullet format.
 
             This is the context: {context}
         """
@@ -139,47 +143,58 @@ class IssueGenerator:
         """
         options_str = ", ".join([f"'{option}'" for option in options])
         prompt = f"""
-            Select ONE of the following options: {options_str}. Return ONLY the selected option without the explanation 
-            between the brackets or additional text.
+            Select ONE option from the provided list.
             
-            {additional_info}
+            Available options: {options_str}
 
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - Return ONLY the selected option.
+            - Remove the information between brackets.
+            - Return without any explanation or additional text.
+            
             This is the context: {context}
         """
         return self.ollama_client.generate_text(prompt)
 
-    def generate_flows(self, context: str, flow_limit: int = 2, additional_info: str = '') -> str:
+    def generate_tables(self, context: str, table_limit: int = 1, table_title: str = 'Table: <title>', table_headers: list = [], additional_info: str = '') -> str:
         """
-        Generate Basic Flow (BF) events with numbered steps.
+        Generate tables in the specified format (Markdown or AsciiDoc).
         
         Args:
-            context: User-provided context for the basic flows
-            flow_limit: Maximum number of flows to generate (default: 2)
+            context: User-provided context for the tables
+            table_limit: Maximum number of tables to generate
+            table_title: Title format string (e.g., "BF{n}: {title}")
+            table_headers: List of header strings
             additional_info: Additional prompt information (optional)
             
         Returns:
-            Generated basic flow events as a structured string
+            Generated tables as a structured string in the correct format.
         """
+        
+        # Define format-specific rules
+        if self.output_format == 'adoc':
+            title_format_rule = f"Table title format: '===== {{title}}' (e.g., '===== {table_title}'). If title is empty, omit this line. Include the attribute line '[cols=\"1,9\",options=\"header\"]' directly below the title and before the table start."
+            header_format_rule = f"Table headers: {table_headers}. Start table with '|===\n'. Formatted the headers like: '|header1 |header2 |...'"
+            row_format_rule = "Table rows format: 'a|row1 |row2 |...'. Start each data row with 'a|'. End table with '|==='."
+        else: # Default to Markdown
+            title_format_rule = f"Table tile is short, action-based and in format: {table_title}. If title is empty, omit this line."
+            header_format_rule = f"Table headers are: {table_headers} in the format '||header1||header2||...||'."
+            row_format_rule = "Table rows are in the format '|row1|row2|...|'."
+
         prompt = f"""
-            Use the following structure for the flow events:
+            Create one or more tables based on the context.
 
-            *{{abbreviation}}{{n}}: {{short, action-based title in Dutch}}*
-            ||Step||Omschrijving||
-            |1|{{first actor action or system response}}|
-            |2|{{next step}}|
-            ...
-
-            {additional_info}
+            Additional information that overrules the rules if contradicting: {additional_info}
 
             Rules:
-            - Generate {flow_limit} flows
-            - Each new flow starts with flow title {{abbreviation}}{{n}}: {{title}}.
-            - Title: short, action-based, in Dutch.
-            - Steps: alternate between actor actions and system responses in Dutch.
-            - Number steps starting from 1 in each flow.
-            - The header rows are 'Step' and 'Omschrijving'.
-            - Use || for headers and | for rows.
-            - Write only the formatted tabel output with newlines, no extra text, characters or code blocks.
+            - Generate {table_limit} table(s).
+            - Table text is in Dutch.
+            - {title_format_rule}
+            - {header_format_rule}
+            - {row_format_rule}
+            - Return only the title and table output, no extra text, newlines or code blocks.
 
             This is the context: {context}
         """
@@ -197,10 +212,11 @@ class IssueGenerator:
         Returns:
             Generated content for the field
         """
+        # self.prompts now correctly points to the 'template_prompts' dictionary
         if field not in self.prompts:
-            raise ValueError(f"Unknown field: {field}")
+            raise ValueError(f"Unknown field in template_prompts: {field}")
         
-        # Get the prompt configuration
+        # Get the prompt configuration for the specific field
         prompt_config = self.prompts[field]
         
         # Check if the prompt has a type and use the appropriate generation function
@@ -226,25 +242,21 @@ class IssueGenerator:
                     raise ValueError("Options list is required for 'selection' generation type")
                 return self.select_from_list(context, options, additional_info)
             
-            elif generation_type == "flows":
-                flow_limit = prompt_config.get("args", {}).get("flow_limit", 50)
-                return self.generate_flows(context, flow_limit, additional_info)
+            elif generation_type == "tables":
+                table_limit = prompt_config.get("args", {}).get("table_limit", 1)
+                # Process table_title format - replace placeholders like <abbreviation> if needed later
+                raw_title_format = prompt_config.get("args", {}).get("table_title", "") 
+                # Simple placeholder replacement for now, might need refinement
+                processed_title = raw_title_format # Placeholder for potential future logic
+                
+                table_headers = prompt_config.get("args", {}).get("table_headers", ["Header1", "Header2"])
+                
+                return self.generate_tables(context, table_limit, processed_title, table_headers, additional_info)
             
             else:
                 raise ValueError(f"Unsupported generation type: {generation_type}")
         
-        # Get the prompt template
-        prompt_template = prompt_config["prompt"]
-        
-        # Replace argument placeholders if present
-        if "args" in prompt_config:
-            for arg_name, arg_value in prompt_config["args"].items():
-                prompt_template = prompt_template.replace(f"{{{arg_name}}}", str(arg_value))
-        
-        # Replace the context placeholder
-        formatted_prompt = prompt_template.replace("{context}", context)
-        
-        return self.ollama_client.generate_text(formatted_prompt)
+        return self.ollama_client.generate_text(prompt)
     
     def generate_full_issue(self, context: str, template_name: str) -> str:
         """

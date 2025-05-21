@@ -2,8 +2,10 @@
 
 Labels: {{ label }}
 
-||Use Case (naam)||Actor||Korte omschrijving (gewenste functionaliteit)||Menu-item||
-|{{ use_case }}|{{ actor }}|{{ korte_omschrijving }}|{{ menu_item }}|
+Use Case (naam): {{ use_case }}
+Actor: {{ actor }}
+Korte omschrijving (gewenste functionaliteit): {{ korte_omschrijving }}
+Menu-item: {{ menu_item }}
  
 h3. Samenvatting
 h4. Korte omschrijving
@@ -22,7 +24,7 @@ h4. Basic Flow (BF) of Events
 h4. Alternative Flows (AF)
 {{ alternative_flow }}
 
-h3. Resultaat
+h3. Postcondities
 h4. Succescondities
 {{ succescondities }}
 

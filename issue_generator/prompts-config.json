@@ -1,165 +1,202 @@
 {
-  "titel": {
-    "type": "header",
-    "args": {
-      "word_limit": 10
+  "system_prompt": "You are a business analyst and helpful AI assistant writing clear, action-based functional documentation for a system handling sensitive private data. Focus on user actions, system responses, data flows, and privacy safeguards, following provided text and instructions without adding or explaining. Your will respond in Dutch.",
+  "template_prompts": {
+    "titel": {
+      "type": "header",
+      "args": {
+        "word_limit": 10
+      }
+    },
+    "label": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "LCM (Topics about Life Cycle Management)",
+          "ABLoket (Topics that come from management, like: Upgraden techstack, migrate techstack, security, quality, policy, etc.)",
+          "YpsilonBeheer (Topics about maintenance, support of the infrastructure and the applications)",
+          "Functioneel (Topics about the functionality of the applications)",
+          "RobotFramework (Topics related to any QA activities, like: RobotFramework, test automation, test cases, etc.)"
+        ]
+      }
+    },
+    "stakeholder": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "Product Owner",
+          "Ontwikkelaar",
+          "Team Ypslion (If the issue is related to the whole scrum team)",
+          "Tester",
+          "ABLoket (If some other actor outside of the scrum team has the incentive)"
+        ]
+      }
+    },
+    "doel": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 15
+      },
+      "additional_info": "Make a VERY concise statement in one sentence about what the user wants to accomplish (WIL IK part of the user story). Return only the statement without WIL IK."
+    },
+    "waarde": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 15
+      },
+      "additional_info": "Make a VERY concise statement in one sentence about the business value or benefit (ZODAT part of the user story). Return only the statement without ZODAT."
+    },
+    "huidige_situatie": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 50
+      },
+      "additional_info": "Describe the current problem or situation that needs to be addressed (the WHY of the story) in 1-3 sentences."
+    },
+    "gewenste_situatie": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 50
+      },
+      "additional_info": "Describe the desired solution for the problem (the HOW of the story) in 1-3 sentences."
+    },
+    "acceptatie_criteria": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 6
+      },
+      "additional_info": "The list items are acceptance criteria."
+    },
+    "use_case": {
+      "type": "header",
+      "args": {
+        "word_limit": 4
+      },
+      "additional_info": "Write a short action-based name for the use case."
+    },
+    "actor": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "Gemeente ambtenaar - rol Vraag",
+          "Gemeente ambtenaar - rol Inkijk",
+          "Gemeente ambtenaar - rol Specials",
+          "BESEilanden",
+          "Functional Beheerder",
+          "Communicatie",
+          "Beheerder Markeerverzoeken",
+          "Beheerder ControleCodes",
+          "Beheerder Zelfevaluatie",
+          "Inkijken Gemeente Gegevens",
+          "Monitoring"
+        ]
+      },
+      "additional_info": "Identify the primary actor(s)/user(s) who will be using this functionality. Multiple actors can be selected."
+    },
+    "korte_omschrijving": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 20
+      },
+      "additional_info": "Write a concise functional description from a user perspective."
+    },
+    "menu_item": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "Home (Algemene informatie, zoals toelichting, Nieuwsberichten, Vragen, FAQ zelfevaluatie)",
+          "Gegevens (In te vullen door gemeentes, zoals bevindingen, Markeerverzoeken, Overzicht controleregels, Inhoudelijk controle persoonslijsten, Wijzigingsverzoeken RNI, Bestanden downloaden, History, FAQ Controles, RPS)",
+          "Processen (Informatie  over ingevulde gegevens)",
+          "Vragenlijsten (Het beantwoorden van vragenlijsten, definitief maken van managementrapportages)",
+          "Uploaden (Ondertekende documenten zoals vragenlijsten uploaden)",
+          "Benchmark (Statistieken over bestandscontrole en overige onderzoeken)",
+          "Specials (RPS-ijst, Protocollering, Selectiebestanden)",
+          "Monitoring (Overzicht vragenlijsten en inhoudelijke controle, overzicht uploaden status, totaaloverzichten vragenlijsten en inhoudelijke controle)",
+          "Beheer (Schemteksten, Vragenlijsten beheren, Zelfevaluaties, Markeerverzoeken, Inhoudelijke controle, Wijzigingsverzoeken RNI, Configuraties, ENSIA importeren)"
+        ]
+      },
+      "additional_info": "Identify which menu item in the application this functionality belongs to."
+    },
+    "lange_omschrijving": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 120
+      },
+      "additional_info": "Write a detailed functional description from a user perspective in 2-8 sentences."
+    },
+    "precondities": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 4
+      },
+      "additional_info": "The list items are preconditions from a users perspective that must be met before this functionality can be used with the application."
+    },
+    "succescondities": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 3
+      },
+      "additional_info": "The list items are success conditions from a users perspective for this epic."
+    },
+    "faalcondities": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 3
+      },
+      "additional_info": "The list items are fail conditions from a users perspective for this epic."
+    },
+    "voorwaarden": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 3
+      },
+      "additional_info": "The list items are conditions or requirements about the stack being or conventions being used."
+    },
+    "interfaces": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 40
+      },
+      "additional_info": "Describe any logical interfaces to other applications, systems, API's or databases."
+    },
+    "documenten": {
+      "type": "bullets",
+      "args": {
+        "bullet_limit": 3
+      },
+      "additional_info": "The list items are documents to download or upload from a users perspective."
+    },
+    "basic_flow": {
+      "type": "tables",
+      "args": {
+        "table_limit": 2,
+        "table_title": "<abbreviation><n>: <title>",
+        "table_headers": ["Step", "Omschrijving"]
+      },
+      "additional_info": "The flow is about the basic flow (happy cases). Use abbreviation BF. Steps: alternate between actor actions and system responses for the 'Omschrijving' column. Number steps starting from 1 in the 'Step' column for each flow."
+    },
+    "alternative_flow": {
+      "type": "tables",
+      "args": {
+        "table_limit": 4,
+        "table_title": "<abbreviation><n>: <title>",
+        "table_headers": ["Step", "Omschrijving"]
+      },
+      "additional_info": "The flow is about the alternative flows (unhappy cases). Use abbreviation AF. Steps: alternate between actor actions and system responses for the 'Omschrijving' column. Number steps starting from 1 in the 'Step' column for each flow."
+    },
+    "business_rules": {
+      "type": "tables",
+      "args": {
+        "table_limit": 1,
+        "table_headers": ["Referentie systeemregels", "Omschrijving"]
+      },
+      "additional_info": "Create rules about the security, accessability en usability. Referentie systeemregels: are numbered like BR<n>, where <n> is representing 4 digits."
+    },
+    "handleiding": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 1000
+      },
+      "additional_info": "Use an instructional and structured tone suitable for a README file. Include headings where appropriate (e.g., Installation, Usage) and format using Markdown syntax. Use plain language and imperative verbs. Do not add unnecessary explanation or commentary."
     }
-  },
-  "label": {
-    "type": "selection",
-    "args": {
-      "options": [
-        "LCM (Topics about Life Cycle Management)", 
-        "ABLoket (Topics that come from management, like: Upgraden techstack, migrate techstack, security, quality, policy, etc.)", 
-        "YpsilonBeheer (Topics about maintenance, support of the infrastructure and the applications)", 
-        "Functioneel (Topics about the functionality of the applications)", 
-        "RobotFramework (Topics related to any QA activities, like: RobotFramework, test automation, test cases, etc.)"
-      ]
-    }
-  },
-  "stakeholder": {
-    "type": "selection",
-    "args": {
-      "options": [
-        "Product Owner", 
-        "Ontwikkelaar", 
-        "Team Ypslion (If the issue is related to the whole scrum team)", 
-        "Tester", 
-        "ABLoket (If some other actor outside of the scrum team has the incentive)"
-      ]
-    }
-  },
-  "doel": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 15
-    },
-    "additional_info": "Make a VERY concise statement in one sentence about what the user wants to accomplish (WIL IK part of the user story). Return only the statement without WIL IK."
-  },
-  "waarde": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 15
-    },
-    "additional_info": "Make a VERY concise statement in one sentence about the business value or benefit (ZODAT part of the user story). Return only the statement without ZODAT."
-  },
-  "huidige_situatie": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 50
-    },
-    "additional_info": "Describe the current problem or situation that needs to be addressed (the WHY of the story) in 1-3 sentences."
-  },
-  "gewenste_situatie": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 50
-    },
-    "additional_info": "Describe the desired solution for the problem (the HOW of the story) in 1-3 sentences."
-  },
-  "acceptatie_criteria": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 6
-    },
-    "additional_info": "The list items are acceptance criteria."
-  },
-  "use_case": {
-    "type": "header",
-    "args": {
-      "word_limit": 4
-    },
-    "additional_info": "Write a short functional name for the use case in Dutch."
-  },
-  "actor": {
-    "type": "selection",
-    "args": {
-      "options": ["Gemeente ambtenaar - rol Vraag", "Gemeente ambtenaar - rol Inkijk", "Gemeente ambtenaar - rol Specials", "BESEilanden", "Functional Beheerder", "Communicatie", "Beheerder Markeerverzoeken", "Beheerder ControleCodes", "Beheerder Zelfevaluatie", "Inkijken Gemeente Gegevens", "Monitoring"]
-    },
-    "additional_info": "Identify the primary actor/user who will be using this functionality. Multiple actors can be selected."
-  },
-  "korte_omschrijving": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 20
-    },
-    "additional_info": "Write a concise functional description."
-  },
-  "menu_item": {
-    "type": "selection",
-    "args": {
-      "options": ["Home (Algemene informatie, zoals toelichting, Nieuwsberichten, Vragen, FAQ zelfevaluatie)", "Gegevens (In te vullen door gemeentes, zoals bevindingen, Markeerverzoeken, Overzicht controleregels, Inhoudelijk controle persoonslijsten, Wijzigingsverzoeken RNI, Bestanden downloaden, History, FAQ Controles, RPS)", "Processen (Informatie  over ingevulde gegevens)" , "Vragenlijsten (Het beantwoorden van vragenlijsten, definitief maken van managementrapportages)", "Uploaden (Ondertekende documenten zoals vragenlijsten uploaden)", "Benchmark (Statistieken over bestandscontrole en overige onderzoeken)", "Specials (RPS-ijst, Protocollering, Selectiebestanden)", "Monitoring (Overzicht vragenlijsten en inhoudelijke controle, overzicht uploaden status, totaaloverzichten vragenlijsten en inhoudelijke controle)", "Beheer (Schemteksten, Vragenlijsten beheren, Zelfevaluaties, Markeerverzoeken, Inhoudelijke controle, Wijzigingsverzoeken RNI, Configuraties, ENSIA importeren)"]
-    },
-    "additional_info": "Identify which menu item in the application this functionality belongs to."
-  },
-  "lange_omschrijving": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 120
-    },
-    "additional_info": "The detailed description should be from a users perspective of the epic in 2-8 sentences."
-  },
-  "precondities": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 4
-    },
-    "additional_info": "The list items are preconditions from a users perspective that must be met before this functionality can be used with the application."
-  },
-  "succescondities": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 3
-    },
-    "additional_info": "The list items are success conditions from a users perspective for this epic."
-  },
-  "faalcondities": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 3
-    },
-    "additional_info": "The list items are fail conditions from a users perspective for this epic."
-  },
-  "voorwaarden": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 3
-    },
-    "additional_info": "The list items are conditions or requirements about the stack being or conventions being used."
-  },
-  "interfaces": {
-    "type": "sentence",
-    "args": {
-      "word_limit": 40
-    },
-    "additional_info": "Describe any logical interfaces to other applications, systems, API's or databases."
-  },
-  "documenten": {
-    "type": "bullets",
-    "args": {
-      "bullet_limit": 3
-    },
-    "additional_info": "The list items are documents to download or upload from a users perspective."
-  },
-  "basic_flow": {
-    "type": "flows",
-    "args": {
-      "flow_limit": 2
-    },
-    "additional_info": "The flow is about the basic flow (happy cases). Use abbreviation BF."
-  },
-  "alternative_flow": {
-    "type": "flows",
-    "args": {
-      "flow_limit": 4
-    },
-    "additional_info": "The flow is about the alternative flows (unhappy cases). Use abbreviation AF."
-  },
-  "business_rules": {
-    "type": "flows",
-    "args": {
-      "flow_limit": 4
-    },
-    "additional_info": "Use the headers: Referentie systeemregels and Omschrijving. The Referentie systeemregels are numbered by BR0001."
   }
 }

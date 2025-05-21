@@ -2,24 +2,27 @@
 Client for interacting with the Ollama API for text generation.
 """
 
-import json
-import requests
 import time
+import ollama
 
 
 class OllamaClient:
     """Client for interacting with Ollama API."""
     
-    def __init__(self, base_url: str = "http://localhost:11434", model: str = "gemma3:12b"):
+    def __init__(self, base_url: str = "http://localhost:11434", model: str = "gemma3:12b", 
+                 system_prompt: str = "You are a helpful AI assistant."):
         """
         Initialize the Ollama client.
         
         Args:
             base_url: Base URL for the Ollama API
             model: Ollama model to use
+            system_prompt: The system prompt to guide the AI model
         """
         self.base_url = base_url
         self.model = model
+        self.system_prompt = system_prompt
+        self.ollama_sdk_client = ollama.Client(host=self.base_url)
     
     def generate_text(self, prompt: str, max_tokens: int = 300, 
                       temperature: float = 0.1, top_p: float = 0.1, 
@@ -50,27 +53,23 @@ class OllamaClient:
             # Clean up prompt by removing newlines and excessive spaces
             cleaned_prompt = " ".join(prompt.replace("\n", " ").split())
             
-            payload = {
+            # Prepare generation parameters
+            params = {
                 "model": self.model,
                 "prompt": cleaned_prompt,
-                "max_tokens": max_tokens,
-                "temperature": temperature,
-                "top_p": top_p,
-                "top_k": top_k,
-                "presence_penalty": presence_penalty,
-                "frequency_penalty": frequency_penalty,
+                "system": self.system_prompt,
+                "options": {
+                    "num_predict": max_tokens,
+                    "temperature": temperature,
+                    "top_p": top_p,
+                    "top_k": top_k,
+                    "presence_penalty": presence_penalty,
+                    "frequency_penalty": frequency_penalty,
+                }
             }
             
-            # Make the API request
-            response = requests.post(
-                f"{self.base_url}/api/generate",
-                json=payload,
-                stream=True
-            )
-            response.raise_for_status()
-            
-            # Process the response
-            result = self._process_streaming_response(response)
+            # Using ollama library for streaming generation
+            result = self._process_streaming_generation(params)
             
             # Log metrics
             self._log_metrics(
@@ -91,42 +90,30 @@ class OllamaClient:
             print(f"\033[91mError: {str(e)}\033[0m")
             raise Exception(f"Error generating text with Ollama: {str(e)}")
     
-    def _process_streaming_response(self, response):
-        """Process the streaming response from Ollama API."""
+    def _process_streaming_generation(self, params):
+        """Process the streaming generation using ollama library."""
         generated_text = ""
         total_prompt_tokens = 0
         total_completion_tokens = 0
         first_token_time = None
         token_times = []
         
-        for line in response.iter_lines():
-            if not line:
-                continue
-                
+        # Use the instance's ollama.Client to get streaming response
+        for chunk in self.ollama_sdk_client.generate(**params, stream=True):
             current_time = time.time()
             
-            try:
-                response_obj = json.loads(line)
+            if 'response' in chunk:
+                if first_token_time is None:
+                    first_token_time = current_time
                 
-                if 'response' in response_obj:
-                    if first_token_time is None:
-                        first_token_time = current_time
-                    
-                    generated_text += response_obj['response']
-                    token_times.append(current_time)
-                
-                # Extract token counts if available
-                if 'prompt_eval_count' in response_obj:
-                    total_prompt_tokens = response_obj['prompt_eval_count']
-                if 'eval_count' in response_obj:
-                    total_completion_tokens = response_obj['eval_count']
-                
-                # Check if we've reached the end of the response
-                if response_obj.get('done', False):
-                    break
-            except json.JSONDecodeError:
-                # Skip lines that aren't valid JSON
-                continue
+                generated_text += chunk['response']
+                token_times.append(current_time)
+            
+            # Extract token counts if available
+            if 'prompt_eval_count' in chunk:
+                total_prompt_tokens = chunk['prompt_eval_count']
+            if 'eval_count' in chunk:
+                total_completion_tokens = chunk['eval_count']
         
         return {
             "text": generated_text.strip(),
