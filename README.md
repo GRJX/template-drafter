@@ -1,4 +1,4 @@
-# Issue Generator
+# Template Drafter
 
 A CLI tool that generates formatted issue descriptions from templates using AI (Ollama).
 
@@ -20,8 +20,8 @@ A CLI tool that generates formatted issue descriptions from templates using AI (
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/create-issues.git
-   cd create-issues
+   git clone https://github.com/yourusername/template-drafter.git
+   cd template-drafter
    ```
 
 2. Install dependencies:
