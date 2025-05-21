@@ -1,76 +1,111 @@
-# AI Issue Generator
+# Issue Generator
 
-A Python tool for automatically generating detailed issue descriptions (Epics, Stories, AsciiDoc) for agile teams using local LLMs via Ollama.
+A CLI tool that generates formatted issue descriptions from templates using AI (Ollama).
 
 ## Features
 
--   Generate complete issue descriptions (Epics, Stories) or AsciiDoc documents from simple context.
--   Utilizes customizable templates stored in the `templates` directory.
--   Leverages local text generation using Ollama, keeping your data private.
--   Supports different output formats (Jira-compatible Markdown, AsciiDoc).
--   Configurable generation behavior via `issue_generator/prompts-config.json`.
--   Object-oriented design for extensibility.
+- Generate different types of issues (epics, stories, documentation)
+- Use customizable templates
+- Powered by Ollama for intelligent content generation
+- Output in different formats (JIRA, AsciiDoc)
 
 ## Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/create-issues.git # Replace with your actual repo URL if different
-cd create-issues
+### Prerequisites
 
-# Install dependencies
-pip install -r requirements.txt
+- Python 3.7+
+- [Ollama](https://github.com/ollama/ollama) installed and running locally (or accessible via URL)
 
-# Ensure Ollama is installed and running
-# Visit https://ollama.com for installation instructions
-# Make sure the desired model (e.g., gemma3:27b) is pulled: ollama pull gemma3:27b
-```
+### Setup
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/create-issues.git
+   cd create-issues
+   ```
+
+2. Install dependencies:
+   ```
+   pip install ollama
+   ```
 
 ## Usage
 
-The tool is run via the command line:
+Basic usage:
 
-```bash
-python cli.py "<Your issue context>" [options]
+```
+python cli.py <context-file> [options]
 ```
 
-**Arguments:**
+Where `<context-file>` is a file containing the context for the issue to be generated.
 
--   `context`: (Required) A string describing the core requirement or topic for the issue/document.
+### Options
 
-**Options:**
+- `--type`: Type of issue to generate (`epic`, `story`, `adoc`, or `docs`). Default: `story`
+- `--output`: Output file path. If not specified, output is printed to stdout
+- `--model`: Ollama model to use. Default: `gemma3:27b`
 
--   `--type`: The type of output to generate. Choices: `epic`, `story`, `adoc`. (Default: `story`)
--   `--output`: The *filename* for the output. If specified, the file will be saved in the `output/` directory (which will be created if it doesn't exist). If omitted, the output is printed to the console.
--   `--model`: The Ollama model to use for generation. (Default: `gemma3:27b`)
+### Examples
 
-## Output Formats
+Generate a user story from a context file:
+```
+python cli.py prompt.txt --type story
+```
 
-The tool can generate output in two formats, determined by the `--type` argument:
+Generate epic documentation and save it to a file:
+```
+python cli.py prompt.txt --type epic --output my-epic.txt
+```
 
--   **Jira/Markdown (`--type story` or `--type epic`):** Generates content using standard Markdown syntax suitable for pasting into Jira or other Markdown-based systems.
--   **AsciiDoc (`--type adoc`):** Generates content using AsciiDoc syntax, suitable for documentation systems that use AsciiDoc.
+Use a specific Ollama model:
+```
+python cli.py prompt.txt --model llama3:8b --output my-issue.txt
+```
 
-The specific formatting rules (e.g., for bullet points, tables) are adjusted based on the selected output format.
+## Templates
+
+Templates are located in the `templates` directory. The following templates are available:
+
+- `epic_template.txt`: Template for epics
+- `story_template.txt`: Template for user stories
+- `adoc_template.txt`: Template for AsciiDoc documentation
+- `docs_template.txt`: Template for general documentation
 
 ## Configuration
 
--   **Templates:** Issue structure is defined by template files (`epic_template.txt`, `story_template.txt`, `adoc_template.txt`) located in the `templates/` directory. You can customize these templates.
--   **Prompts:** The specific instructions given to the LLM for generating each section of the template are configured in `issue_generator/prompts-config.json`. This file defines the generation `type` (header, sentence, bullets, selection, tables) and associated parameters (word limits, options, table headers, etc.) for each template placeholder (e.g., `{{ title }}`, `{{ acceptance_criteria }}`).
+System prompts and template configurations can be modified in `issue_generator/prompts-config.json`.
 
-## Examples
+## Workflow
 
-1.  **Generate a user story and print to console:**
-    ```bash
-    python cli.py "Implement login functionality using email and password"
-    ```
+The following activity diagram illustrates the workflow of the CLI tool:
 
-2.  **Generate an epic and save to `output/epic_auth.md`:**
-    ```bash
-    python cli.py "User Authentication System" --type epic --output epic_auth.md
-    ```
-
-3.  **Generate an AsciiDoc document using a different model and save to `output/tech_spec.adoc`:**
-    ```bash
-    python cli.py "Technical specification for the new reporting module" --type adoc --model llama3:8b --output tech_spec.adoc
-    ```
+```mermaid
+graph TD
+    Start([Start]) --> ParseArgs[Parse Command Line Arguments]
+    ParseArgs --> ValidateArgs{Valid Arguments?}
+    ValidateArgs -->|No| ShowHelp[Show Help Message]
+    ValidateArgs -->|Yes| LoadContextFile[Load Context File]
+    
+    LoadContextFile --> ContextLoaded{Context Loaded?}
+    ContextLoaded -->|No| Error[Display Error]
+    ContextLoaded -->|Yes| SelectTemplate[Select Template Based on Type]
+    
+    SelectTemplate --> LoadConfig[Load Configuration]
+    LoadConfig --> ConnectOllama[Connect to Ollama]
+    ConnectOllama --> ConnectionSuccess{Connection Successful?}
+    
+    ConnectionSuccess -->|No| ConnectionError[Display Connection Error]
+    ConnectionSuccess -->|Yes| GenerateContent[Generate Issue Content]
+    
+    GenerateContent --> FormatOutput[Format Output]
+    FormatOutput --> OutputSpecified{Output File Specified?}
+    
+    OutputSpecified -->|Yes| SaveToFile[Save to File]
+    OutputSpecified -->|No| PrintToStdout[Print to Stdout]
+    
+    SaveToFile --> End([End])
+    PrintToStdout --> End
+    ShowHelp --> End
+    Error --> End
+    ConnectionError --> End
+```
