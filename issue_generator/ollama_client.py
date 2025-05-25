@@ -4,6 +4,7 @@ Client for interacting with the Ollama API for text generation.
 
 import time
 import ollama
+import re
 
 
 class OllamaClient:
@@ -84,7 +85,10 @@ class OllamaClient:
             # Print success message in green
             print("\033[92mGeneration completed successfully\033[0m")
             
-            return result["text"]
+            # Clean the response to remove any thinking tags
+            cleaned_text = self._clean_response(result["text"])
+            
+            return cleaned_text
         except Exception as e:
             # Print error in red
             print(f"\033[91mError: {str(e)}\033[0m")
@@ -146,3 +150,17 @@ class OllamaClient:
         else:
             print("\tSpeed: N/A tokens/second")
         print("\t---------------------------\033[0m\n")
+    
+    def _clean_response(self, text: str) -> str:
+        """Remove thinking tags and other unwanted elements from the response."""
+        # Remove <think>...</think> tags and their content
+        text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        
+        # Remove any standalone <think> or </think> tags
+        text = re.sub(r'</?think>', '', text, flags=re.IGNORECASE)
+        
+        # Clean up any extra whitespace that might be left
+        text = re.sub(r'\n\s*\n', '\n\n', text)  # Replace multiple newlines with double newlines
+        text = text.strip()
+        
+        return text

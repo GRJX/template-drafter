@@ -1,5 +1,5 @@
 {
-  "system_prompt": "You are a business analyst and helpful AI assistant writing clear, action-based functional documentation for a system handling sensitive private data. Focus on user actions, system responses, data flows, and privacy safeguards, following provided text and instructions without adding or explaining. Your will respond in Dutch.",
+  "system_prompt": "You are a business analyst and helpful AI assistant writing clear, action-based functional documentation for a system handling sensitive private data. Focus on user actions, system responses, data flows, and privacy safeguards, following provided text and instructions without adding or explaining. Your will respond in Dutch. /no_think",
   "template_prompts": {
     "titel": {
       "type": "header",
