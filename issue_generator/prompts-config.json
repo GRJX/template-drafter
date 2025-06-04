@@ -197,6 +197,51 @@
         "word_limit": 1000
       },
       "additional_info": "Use an instructional and structured tone suitable for a README file. Include headings where appropriate (e.g., Installation, Usage) and format using Markdown syntax. Use plain language and imperative verbs. Do not add unnecessary explanation or commentary."
+    },
+    "impact_van_de_bug": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "Kritiek (Systeem niet bruikbaar, productie verstoord)",
+          "Hoog (Belangrijke functionaliteit werkt niet, workaround mogelijk)",
+          "Gemiddeld (Functionaliteit werkt gedeeltelijk, gebruikerservaring verstoord)",
+          "Laag (Kleine visuele/tekstuele fouten, geen impact op functionaliteit)"
+        ]
+      },
+      "additional_info": "Select the impact level based on how severely the bug affects the system or users."
+    },
+    "omgeving": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "ONT (Ontwikkelomgeving)",
+          "LAP (Acceptatieomgeving)",
+          "NPR (Pre-productieomgeving)",
+          "PRD (Productieomgeving)"
+        ]
+      },
+      "additional_info": "Select the environment or platform where the bug occurs."
+    },
+    "verwacht_gedrag": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 30
+      },
+      "additional_info": "Describe what should happen when the steps are performed correctly."
+    },
+    "actueel_gedrag": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 30
+      },
+      "additional_info": "Describe what actually happens instead of the expected behavior."
+    },
+    "reproduceer_stappen": {
+      "type": "numbered",
+      "args": {
+        "step_limit": 8
+      },
+      "additional_info": "Create a numbered list of clear, sequential steps to reproduce the issue."
     }
   }
 }

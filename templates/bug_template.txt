@@ -1,0 +1,21 @@
+{{ titel }}
+
+Impact:
+{{ impact_van_de_bug }}
+
+Omgeving:
+{{ omgeving }}
+
+Stappen om te reproduceren:
+{{ reproduceer_stappen }}
+
+*Verwacht gedrag:*
+{{ verwacht_gedrag }}
+
+*Actueel gedrag:*
+{{ actueel_gedrag }}
+
+*Foutmeldingen/Logs:*
+* <logs>
+* <screenshot>
+* <documenten>

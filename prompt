@@ -1,1 +1,4 @@
-Test
+In de KMW, uw gemeente in detail is geconstateerd dat bij de melding L2641 geenbutton markering aangevraagd kan worden.
+Bij andere foutcodes op de productie staat de button er wel bij, ik ga nog kijken of er op productie meerdere codes verschijnen zonder de knop markering indienen.
+Op NPR en LAP heb ik ook geconstateerd dat de button markering indienen bij L2641 niet verschijnt en bij een paar hogere codes niet zichtbaar is.
+Lagere codes lijken het allemaal wel te doen
