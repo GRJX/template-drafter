@@ -144,20 +144,19 @@ class IssueGenerator:
 
         # Define format-specific rules
         if self.output_format == 'adoc':
-            number_format = "Number format: '. <step_item> +'."
+            number_format = "'. <step_item> +'."
         else: # Default to Jira
-            number_format = "Number format: '# <step_item>'."
+            number_format = "'# <step_item>'."
         
         prompt = f"""
-            Create a numbered list of sequential steps or items. 
+            Create a list of sequential steps or items. 
             
             Additional information that overrules the rules if contradicting: {additional_info}
 
             Rules:
             - Maximum {step_limit} numbered items.
-            - {number_format}
             - Each step should be clear and actionable.
-            - Steps should follow a logical sequence.
+            - Don't use number to sequence steps, but this format: {number_format}.
             - Return without any explanation, additional text or special characters beyond the number format.
 
             This is the context: {context}

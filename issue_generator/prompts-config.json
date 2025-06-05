@@ -227,21 +227,21 @@
       "args": {
         "word_limit": 30
       },
-      "additional_info": "Describe what should happen when the steps are performed correctly."
+      "additional_info": "Describe the precise, correct outcome if the software worked flawlessly. This means detailing what should happen in contrast to the observed issue. Be specific about UI, data, or system responses."
     },
     "actueel_gedrag": {
       "type": "sentence",
       "args": {
         "word_limit": 30
       },
-      "additional_info": "Describe what actually happens instead of the expected behavior."
+      "additional_info": "Describe exactly what did happen when you followed the steps to reproduce the bug. Detail the observed incorrect outcome, error messages, or unexpected system state."
     },
     "reproduceer_stappen": {
       "type": "numbered",
       "args": {
         "step_limit": 8
       },
-      "additional_info": "Create a numbered list of clear, sequential steps to reproduce the issue."
+      "additional_info": "List the precise, numbered sequence of actions that consistently lead to the bug. Start from a clear initial state and include all necessary clicks, inputs, and navigations."
     }
   }
 }

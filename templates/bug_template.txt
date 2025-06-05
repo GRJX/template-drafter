@@ -1,12 +1,10 @@
 {{ titel }}
 
-Impact:
-{{ impact_van_de_bug }}
+*Impact:* {{ impact_van_de_bug }}
 
-Omgeving:
-{{ omgeving }}
+*Omgeving:* {{ omgeving }}
 
-Stappen om te reproduceren:
+*Stappen om te reproduceren:*
 {{ reproduceer_stappen }}
 
 *Verwacht gedrag:*
