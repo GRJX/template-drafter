@@ -1,5 +1,7 @@
 {{ titel }}
 
+*Affected Version:*
+
 *Impact:* {{ impact_van_de_bug }}
 
 *Omgeving:* {{ omgeving }}

@@ -1,0 +1,99 @@
+*Use Case (naam):* Wijzig RNI Verzoek +
+*Actor:* Gemeente ambtenaar - rol Vraag +
+*Korte omschrijving (gewenste functionaliteit):* Gemeenten passen mutaties aan, filteren verzoeken en beheren RNI-gegevens via aangepaste schermen en velden. +
+*Menu-item:* Gegevens +
+ 
+=== Samenvatting
+==== Korte omschrijving
+De gemeente navigeert naar het menu ‘Gegevens’ en selecteert ‘Wijzigingsverzoek RNI’ om een mutatieverzoek in te dienen. De gebruiker vult verplichte velden in, waaronder een telefoonnummer en selecteert een mutatiesoort zoals ‘Wijziging persoonsnummer’ of ‘Wijziging adresgegevens buitenland’. Afhankelijk van de gekozen mutatiesoort verschijnen relevante velden, zoals EU-persoonsnummer of adresgegevens buitenland. Het systeem valideert de ingevoerde gegevens en biedt de mogelijkheid om documenten te uploaden indien ‘Wijzigingsverzoek Persoonslijst’ is aangevinkt. De RvIG-beheerder filtert mutatieverzoeken op mutatiesoort en status (Ontvangen, In behandeling, Verwerkt, Niet verwerkt, Verzoek om aanvullende informatie). In het overzichtsscherm ziet de beheerder de kolom ‘Soort wijziging’ en kan hij details inzien, inclusief het telefoonnummer (alleen lezen). Gemeenten zien in het overzicht ‘Wijzigingsverzoek(en)’ en een harde tekst onder de status indien het verzoek ‘Niet verwerkt’ of ‘Verzoek om aanvullende informatie’ is. De database wordt aangepast met nieuwe velden voor telefoonnummer, adresgegevens buitenland, EU-persoonsnummer en
+
+==== Actor
+Gemeente ambtenaar - rol Vraag 
+
+=== Precondities
+- De gebruiker beschikt over de benodigde rechten om het menu Gegevens te openen. +
+- De gebruiker heeft toegang tot het scherm 'Specials' en de bijbehorende persoonslijsten. +
+- De gebruiker heeft de juiste autorisatie om mutaties te verwerken binnen de RNI-functionaliteit. +
+- De database is correct aangepast met de nieuwe velden voor WijzigingsVerzoek RNI. +
+
+=== Flows
+==== Basic Flow (BF) of Events
+===== BF1: Aanpassen Detail Scherm Gemeente
+[cols="1,9",options="header"]
+|===
+| Step | Omschrijving
+| 1 | De gemeente navigeert naar het menu 'Gegevens', onder 'inhoudelijke controle persoonslijsten'.
+| 2 | Het systeem toont het detail scherm, met de titel gewijzigd in "Wijzigingsverzoek RNI".
+| 3 | De gemeente vult het verplichte veld 'Telefoonnummer contactpersoon' in, onder het e-mail veld.
+| 4 | Het systeem valideert de invoer van het telefoonnummer.
+| 5 | De gemeente selecteert de mutatiesoort 'Wijzigingsverzoek Persoonslijst'.
+| 6 | Het systeem toont het uploadscherm, indien 'Wijzigingsverzoek Persoonslijst' is aangevinkt.
+|===
+
+===== BF2: Beheerscherm Mutatieverzoek RvIG - Zoeken en Overzicht
+[cols="1,9",options="header"]
+|===
+| Step | Omschrijving
+| 1 | De beheerder opent het beheerscherm 'Mutatieverzoek RvIG'.
+| 2 | Het systeem toont het filter met de aangepaste mutatiesoorten: 'Buitenlands persoonsnummer', 'Wijzigen
+
+==== Alternative Flows (AF)
+===== AF1: Onjuiste invoer telefoonnummer
+[cols="1,9",options="header"]
+|===
+| Step | Omschrijving
+| 1 | Actor: Voert een ongeldig telefoonnummer in (niet 20 tekens).
+| 2 | Systeem: Toont een foutmelding: "Telefoonnummer moet 20 tekens bevatten." en accepteert de invoer niet.
+|===
+
+===== AF2: Ontbrekende verplichte velden
+[cols="1,9",options="header"]
+|===
+| Step | Omschrijving
+| 1 | Actor: Laat het veld 'Telefoonnummer contactpersoon' leeg.
+| 2 | Systeem: Toont een foutmelding: "Telefoonnummer contactpersoon is een verplicht veld." en accepteert de invoer niet.
+|===
+
+===== AF3: Onjuiste mutatiesoort selectie
+[cols="1,9",options="header"]
+|===
+| Step | Omschrijving
+| 1 | Actor: Selecteert een mutatiesoort die niet beschikbaar is voor het 'Wijzigingsverzoek Persoonslijst'.
+| 2 | Systeem: Toont een foutmelding: "Geselecteerde mutatiesoort is niet toegestaan voor dit verzoek." en accepteert
+
+=== Postcondities
+==== Succescondities
+- De gemeente kan een wijzigingsverzoek RNI indienen met een telefoonnummer contactpersoon +
+- De RvIG beheerder kan mutaties zoeken en filteren op nieuwe mutatiesoorten en statussen +
+- Het systeem toont relevante velden op basis van de geselecteerde mutatiesoort en geeft een aanwijzing bij de status "Niet verwerkt" of "Verzoek om aanvullende informatie" +
+
+==== Faalcondities
+- Telefoonnummer contactpersoon is niet ingevuld +
+- Er wordt geen nieuw wijzigingsverzoek ingediend terwijl de status “Niet verwerkt” of “Verzoek om aanvullende informatie” is +
+- Database wijzigingen zijn niet doorgevoerd +
+
+=== Controles en regels
+===== Systeemregels Mutatie Laatste Woongemeente (RNI)
+[cols="1,9",options="header"]
+|===
+|Referentie systeemregels |Omschrijving
+|BR0001 |Telefoonnummer contactpersoon is een verplicht veld op het detail scherm van de gemeente.
+|BR0002 |Mutatiesoort 'Overige mutaties' wordt aangepast naar 'Wijzigingsverzoek Persoonslijst'.
+|BR0003 |De volgorde van mutatiesoorten is gewijzigd: Toevoegen buitenlands persoonsnummer, Wijzigen adresgegevens buitenland, Wijzigingsverzoek Persoonslijst.
+|BR0004 |Het uploadscherm wordt alleen getoond als 'Wijz. Persoonslijst' is aangevinkt.
+|BR0005 |Filter op beheerscherm mutatieverzoek RvIG is aangepast aan de nieuwe mutatiesoorten.
+|BR0006 |Extra filter toegevoegd op beheerscherm mutatieverzoek RvIG over de statussen: Ontvangen, In behandeling, Verwerkt, Niet verwerkt, Verzoek om aanvullende informatie.
+|BR0007 |Kolomtitel 'Mutatiesoort' wordt gewijzigd in 'Soort wijziging' op
+
+=== Aanvullende eisen
+==== Voorwaarden
+- Database entiteiten (Hibernate) aangepast en velden toegevoegd +
+- Schermteksten zijn aanpasbaar via beheer +
+- Mutatiesoorten aangepast en volgorde gewijzigd +
+
+==== Logische interfaces (naar andere applicaties)
+De gemeente past detailsschermen aan, voegt velden toe en wijzigt filters voor RNI-mutaties, data wordt opgeslagen in de WijzigingsVerzoek RNI database entiteiten.
+
+=== Logische omschrijving
+==== Input- en outputdocumenten
+- <input_outputdocumenten> +
