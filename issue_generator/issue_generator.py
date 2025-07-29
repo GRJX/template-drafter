@@ -211,7 +211,7 @@ class IssueGenerator:
         if self.output_format == 'adoc':
             title_format_rule = f"Table title format: '===== {{title}}' (e.g., '===== {table_title}'). If title is empty, omit this line. Include the attribute line '[cols=\"1,9\",options=\"header\"]' directly below the title and before the table start."
             header_format_rule = f"Table headers: {table_headers}. Start table with '|===\n'. Formatted the headers like: '|header1 |header2 |...'"
-            row_format_rule = "Table rows format: 'a|row1 |row2 |...'. Start each data row with 'a|'. End table with '|==='."
+            row_format_rule = "Table rows format: '|row1 |row2 |...'. Start each data row with '|'. End table with '|==='."
         else: # Default to Markdown
             title_format_rule = f"Table tile is short, action-based and in format: {table_title}. If title is empty, omit this line."
             header_format_rule = f"Table headers are: {table_headers} in the format '||header1||header2||...||'."

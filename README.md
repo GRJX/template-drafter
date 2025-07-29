@@ -26,7 +26,7 @@ A CLI tool that generates formatted issue descriptions from templates using AI (
 
 2. Install dependencies:
    ```
-   pip install ollama
+   pip install -r requirements.txt
    ```
 
 ## Usage
