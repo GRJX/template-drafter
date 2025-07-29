@@ -15,9 +15,9 @@ def main():
     """Main entry point for the issue generator script."""
     parser = argparse.ArgumentParser(description="Generate issue descriptions from templates using AI")
     parser.add_argument("context", help="Path to the file containing the context for the issue to generate")
-    parser.add_argument("--type", choices=["epic", "story", "adoc", "docs"], default="story", help="Type of issue to generate (epic, story, or adoc)")
+    parser.add_argument("--type", choices=["epic", "story", "adoc", "docs", "bug"], default="story", help="Type of issue to generate (epic, story, or adoc)")
     parser.add_argument("--output", help="Output file (stdout if not specified)")
-    parser.add_argument("--model", default="gemma3:27b", help="Ollama model to use")
+    parser.add_argument("--model", default="gemma3:12b", help="Ollama model to use")
     
     args = parser.parse_args()
 

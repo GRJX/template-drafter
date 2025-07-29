@@ -197,6 +197,51 @@
         "word_limit": 1000
       },
       "additional_info": "Use an instructional and structured tone suitable for a README file. Include headings where appropriate (e.g., Installation, Usage) and format using Markdown syntax. Use plain language and imperative verbs. Do not add unnecessary explanation or commentary."
+    },
+    "impact_van_de_bug": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "Kritiek (Systeem niet bruikbaar, productie verstoord)",
+          "Hoog (Belangrijke functionaliteit werkt niet, workaround mogelijk)",
+          "Gemiddeld (Functionaliteit werkt gedeeltelijk, gebruikerservaring verstoord)",
+          "Laag (Kleine visuele/tekstuele fouten, geen impact op functionaliteit)"
+        ]
+      },
+      "additional_info": "Select the impact level based on how severely the bug affects the system or users."
+    },
+    "omgeving": {
+      "type": "selection",
+      "args": {
+        "options": [
+          "ONT (Ontwikkelomgeving)",
+          "LAP (Acceptatieomgeving)",
+          "NPR (Pre-productieomgeving)",
+          "PRD (Productieomgeving)"
+        ]
+      },
+      "additional_info": "Select the environment or platform where the bug occurs."
+    },
+    "verwacht_gedrag": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 30
+      },
+      "additional_info": "Describe the precise, correct outcome if the software worked flawlessly. This means detailing what should happen in contrast to the observed issue. Be specific about UI, data, or system responses."
+    },
+    "actueel_gedrag": {
+      "type": "sentence",
+      "args": {
+        "word_limit": 30
+      },
+      "additional_info": "Describe exactly what did happen when you followed the steps to reproduce the bug. Detail the observed incorrect outcome, error messages, or unexpected system state."
+    },
+    "reproduceer_stappen": {
+      "type": "numbered",
+      "args": {
+        "step_limit": 8
+      },
+      "additional_info": "List the precise, numbered sequence of actions that consistently lead to the bug. Start from a clear initial state and include all necessary clicks, inputs, and navigations."
     }
   }
 }

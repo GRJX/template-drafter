@@ -129,6 +129,40 @@ class IssueGenerator:
         """
         return self.ollama_client.generate_text(prompt)
 
+    def generate_numbered(self, context: str, step_limit: int = 5, additional_info: str = '') -> str:
+        """
+        Generate a numbered list of sequential steps.
+        
+        Args:
+            context: User-provided context for the numbered steps
+            step_limit: Maximum number of steps to generate (default: 5)
+            additional_info: Additional prompt information (optional)
+            
+        Returns:
+            Generated numbered steps as a string
+        """
+
+        # Define format-specific rules
+        if self.output_format == 'adoc':
+            number_format = "'. <step_item> +'."
+        else: # Default to Jira
+            number_format = "'# <step_item>'."
+        
+        prompt = f"""
+            Create a list of sequential steps or items. 
+            
+            Additional information that overrules the rules if contradicting: {additional_info}
+
+            Rules:
+            - Maximum {step_limit} numbered items.
+            - Each step should be clear and actionable.
+            - Don't use number to sequence steps, but this format: {number_format}.
+            - Return without any explanation, additional text or special characters beyond the number format.
+
+            This is the context: {context}
+        """
+        return self.ollama_client.generate_text(prompt)
+
     def select_from_list(self, context: str, options: List[str], additional_info: str = '') -> str:
         """
         Select a single item from a predefined list based on the context.
@@ -235,6 +269,10 @@ class IssueGenerator:
             elif generation_type == "bullets":
                 bullet_limit = prompt_config.get("args", {}).get("bullet_limit", 5)
                 return self.generate_bullets(context, bullet_limit, additional_info)
+            
+            elif generation_type == "numbered":
+                step_limit = prompt_config.get("args", {}).get("step_limit", 5)
+                return self.generate_numbered(context, step_limit, additional_info)
             
             elif generation_type == "selection":
                 options = prompt_config.get("args", {}).get("options", [])
