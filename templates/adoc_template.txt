@@ -3,40 +3,86 @@
 *Korte omschrijving (gewenste functionaliteit):* {{ korte_omschrijving }} +
 *Menu-item:* {{ menu_item }} +
  
+<<<
+== Use Case - {{ use_case }}
+
 === Samenvatting
+
 ==== Korte omschrijving
+
 {{ lange_omschrijving }}
 
 ==== Actor
+
 {{ actor }} 
 
 === Precondities
+
 {{ precondities }}
 
+=== Schermen
+
+.Figuur Footer Tekst
+image::pagina_screenshot.png[image,width=600]
+
 === Flows
+
 ==== Basic Flow (BF) of Events
+
 {{ basic_flow }}
 
 ==== Alternative Flows (AF)
+
 {{ alternative_flow }}
 
 === Postcondities
+
 ==== Succescondities
+
 {{ succescondities }}
 
 ==== Faalcondities
+
+Geen faalcondities zijn van toepassing voor deze use case.
+
 {{ faalcondities }}
 
 === Controles en regels
+
+Geen controles en regels zijn van toepassing voor deze use case.
+
 {{ business_rules}}
 
 === Aanvullende eisen
+
 ==== Voorwaarden
+
+Geen voorwaarden zijn van toepassing voor deze use case.
+
+Het scherm toont titel een toelichtende tekst, welke door de beheerder onderhoudbaar is in de functie Bewerken schermteksten (zie <<Use Case BH31 - Bewerken Statische Scherm Teksten>>).
+
 {{ voorwaarden }}
 
 ==== Logische interfaces (naar andere applicaties)
+
+Geen logische interfaces zijn van toepassing voor deze use case.
+
 {{ interfaces }}
 
 === Logische omschrijving
+
 ==== Input- en outputdocumenten
-- <input_outputdocumenten> +
+
+Geen input- en outputdocumenten zijn van toepassing voor deze use case.
+
+* Resultaten weergaven in Excel.
+* Resultaten weergaven in PDF.
+
+Output voorbeeld:
+[cols=",,,,,,"]
+|===
+|Overzicht gegeneerd op: 6+|30-08-2016				
+|Filters: 6+|A-nummer: 1351846563
+|Volgnr |A-nummer |Fout |Hersteld |Toelichting |Foutklasse |Controledatum
+|2 |1351846563 |Ja |Ja |51 Persoon historie - Overig |C |30-08-2016
+|===
