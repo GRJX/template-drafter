@@ -20,11 +20,6 @@ A CLI tool that generates formatted issue descriptions from templates using AI (
 
 1. Clone this repository:
 
-   ```
-   git clone https://github.com/GRJX/template-drafter.git
-   cd template-drafter
-   ```
-
 2. Install dependencies:
    ```
    pip install -r requirements.txt

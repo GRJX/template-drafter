@@ -3,8 +3,8 @@
 Labels: {{ label }}
 
 *ALS* {{ stakeholder }},
-*WIL IK* {{ doel }}
-*ZODAT* {{ waarde }}
+{{ doel }}
+{{ waarde }}
 
 *Probleem:*
 {{ huidige_situatie }}
@@ -17,7 +17,7 @@ Labels: {{ label }}
 
 *Acceptatiecriteria:*
 {{ acceptatie_criteria }}
-* Story voldoet aan de [DoD|https://gitlab.dictuy.iesprd.ictu-sr.nl/ypsilon/docs/-/wikis/Scrum#definition-of-done].
+* Story voldoet aan de [DoD|https://gitlab.dictuy.iesprd.ictu-sr.nl/ypsilon/docs/-/wikis/01.Werkwijze-Processen/Scrum].
 
 *Technische details: (optioneel)*
 * Documentatie: <fo_text>

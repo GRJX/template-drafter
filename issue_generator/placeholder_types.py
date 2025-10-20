@@ -39,7 +39,7 @@ class PlaceholderTypes:
 
             Rules:
             - Maximum {word_limit} words.
-            - Return without any additional text or punctuation.
+            - Return without any additional text or punctuations.
 
             This is the context: {context}
         """

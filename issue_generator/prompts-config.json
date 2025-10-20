@@ -1,5 +1,5 @@
 {
-  "system_prompt": "You are a business analyst and helpful AI assistant writing clear, action-based functional documentation for a system handling sensitive private data. Focus on user actions, system responses, data flows, and privacy safeguards, following provided text and instructions without adding or explaining. Your will respond in Dutch. /no_think",
+  "system_prompt": "You are a business analyst writing clear, action-based functional text for a system handling sensitive data. Only return the text without adding or explaining. Your must respond in Dutch. /no_think",
   "template_prompts": {
     "titel": {
       "type": "header",
@@ -12,8 +12,7 @@
       "args": {
         "options": [
           "LCM (Topics about Life Cycle Management)",
-          "ABLoket (Topics that come from management, like: Upgraden techstack, migrate techstack, security, quality, policy, etc.)",
-          "YpsilonBeheer (Topics about maintenance, support of the infrastructure and the applications)",
+          "Beheer (Topics that come from management, like: Upgraden techstack, migrate techstack, security, quality, policy, etc.)",
           "Functioneel (Topics about the functionality of the applications)",
           "RobotFramework (Topics related to any QA activities, like: RobotFramework, test automation, test cases, etc.)"
         ]
@@ -25,9 +24,8 @@
         "options": [
           "Product Owner",
           "Ontwikkelaar",
-          "Team Ypslion (If the issue is related to the whole scrum team)",
-          "Tester",
-          "ABLoket (If some other actor outside of the scrum team has the incentive)"
+          "Team Ypslion (Related to the whole scrum team)",
+          "Tester"
         ]
       }
     },
@@ -36,28 +34,28 @@
       "args": {
         "word_limit": 15
       },
-      "additional_info": "Make a VERY concise statement in one sentence about what the user wants to accomplish (WIL IK part of the user story). Return only the statement without WIL IK."
+      "additional_info": "Write a concise sentence that clearly states the specific action, functionality, or goal the user needs the system to implement, which directly solves the stated problem. This sentence represents the 'I want' part of the user story. Start sentence must start with `*WIL IK*` and be immediately followed by the desired action or goal."
     },
     "waarde": {
       "type": "sentence",
       "args": {
         "word_limit": 15
       },
-      "additional_info": "Make a VERY concise statement in one sentence about the business value or benefit (ZODAT part of the user story). Return only the statement without ZODAT."
+      "additional_info": "Write a concise sentence that clearly states the intended benefit, value, or ultimate goal that will be achieved by implementing the 'I want' action, focusing on the positive impact for the user, customer, or business. This sentence represents the 'So that' part of the user story. Start sentence must start with `*ZODAT*` and be immediately followed by the desired action or goal."
     },
     "huidige_situatie": {
       "type": "sentence",
       "args": {
         "word_limit": 50
       },
-      "additional_info": "Describe the current problem or situation that needs to be addressed (the WHY of the story) in 1-3 sentences."
+      "additional_info": "Write a concise sentence that clearly and compellingly states the current problem, pain point, or negative consequence experienced by the user or business that makes this feature request or technical fix a priority. Focus only on the 'Why' this work is needed, describing the impact of the status quo"
     },
     "gewenste_situatie": {
       "type": "sentence",
       "args": {
         "word_limit": 50
       },
-      "additional_info": "Describe the desired solution for the problem (the HOW of the story) in 1-3 sentences."
+      "additional_info": "Write a single, concise sentence that describes the desired future state once this feature or fix is implemented. Clearly state what the user will be able to do or how the system will behave differently, and the positive outcome or benefit this new state will achieve for the user or business. Focus only on the 'Solution and Outcome' (the What and the Benefit)."
     },
     "acceptatie_criteria": {
       "type": "bullets",
