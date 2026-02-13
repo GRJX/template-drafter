@@ -1,5 +1,5 @@
 {
-  "system_prompt": "You are a business analyst writing clear, action-based functional text for a system handling sensitive data. Only return the text without adding or explaining. Your must respond in Dutch. /no_think",
+  "system_prompt": "You are a business analyst writing clear functional text. Only return the text without adding or explaining. Your must respond in Dutch. /no_think",
   "template_prompts": {
     "titel": {
       "type": "header",
@@ -207,18 +207,6 @@
         ]
       },
       "additional_info": "Select the impact level based on how severely the bug affects the system or users."
-    },
-    "omgeving": {
-      "type": "selection",
-      "args": {
-        "options": [
-          "ONT (Ontwikkelomgeving)",
-          "LAP (Acceptatieomgeving)",
-          "NPR (Pre-productieomgeving)",
-          "PRD (Productieomgeving)"
-        ]
-      },
-      "additional_info": "Select the environment or platform where the bug occurs."
     },
     "verwacht_gedrag": {
       "type": "sentence",

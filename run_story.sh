@@ -13,6 +13,10 @@ fi
 echo "Activating virtual environment..."
 source .venv/bin/activate
 
+# Generate timestamp for unique output file
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+OUTPUT_FILE="output_${TIMESTAMP}.adoc"
+
 # Run the CLI with all provided arguments
 echo "Running CLI with arguments: prompt"
-python cli.py prompt --type story --model gemma3:27b
+python cli.py prompt --type story --model gemma3:27b --output "$OUTPUT_FILE"
