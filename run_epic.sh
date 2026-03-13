@@ -15,4 +15,4 @@ source .venv/bin/activate
 
 # Run the CLI with all provided arguments
 echo "Running CLI with arguments: prompt"
-python cli.py prompt --type epic --model gemma3:27b
+python cli.py prompt --type epic --model gpt-oss:latest --quality high

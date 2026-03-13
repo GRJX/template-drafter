@@ -18,4 +18,4 @@ OUTPUT_FILE="output_${TIMESTAMP}.adoc"
 
 # Run the CLI with all provided arguments
 echo "Running CLI with arguments: prompt"
-python cli.py prompt --type bug --model gemma3:27b --output "$OUTPUT_FILE"
+python cli.py prompt --type bug --model gpt-oss:latest --quality high --output "$OUTPUT_FILE"

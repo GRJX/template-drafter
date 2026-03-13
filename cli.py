@@ -18,6 +18,7 @@ def main():
     parser.add_argument("--type", choices=["epic", "story", "adoc", "docs", "bug"], default="story", help="Type of issue to generate (epic, story, or adoc)")
     parser.add_argument("--output", help="Output file (stdout if not specified)")
     parser.add_argument("--model", default="gemma3:12b", help="Ollama model to use")
+    parser.add_argument("--quality", choices=["high", "medium", "low"], help="Quality setting for models that support it (e.g., gpt-oss:latest)")
     
     args = parser.parse_args()
 
@@ -50,7 +51,7 @@ def main():
     try:
         template_manager = TemplateManager(template_dir, prompt_config_path)
         system_prompt = template_manager.get_system_prompt()
-        ollama_client = OllamaClient(model=args.model, system_prompt=system_prompt)
+        ollama_client = OllamaClient(model=args.model, system_prompt=system_prompt, quality=args.quality)
         issue_generator = IssueGenerator(template_manager=template_manager, ollama_client=ollama_client, output_format=output_format)
     except FileNotFoundError as e:
         print(f"\033[91mInitialization Error: {str(e)}\033[0m")

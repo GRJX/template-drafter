@@ -20,4 +20,4 @@ OUTPUT_FILE="output_${TIMESTAMP}.adoc"
 # Run the CLI with all provided arguments
 echo "Running CLI with arguments: prompt"
 echo "Output will be saved to: $OUTPUT_FILE"
-python cli.py prompt --type adoc --model gemma3:27b --output "$OUTPUT_FILE"
+python cli.py prompt --type adoc --model gpt-oss:latest --quality high --output "$OUTPUT_FILE"

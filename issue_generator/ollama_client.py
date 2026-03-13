@@ -11,7 +11,7 @@ class OllamaClient:
     """Client for interacting with Ollama API."""
     
     def __init__(self, base_url: str = "http://localhost:11434", model: str = "gemma3:12b", 
-                 system_prompt: str = "You are a helpful AI assistant."):
+                 system_prompt: str = "You are a helpful AI assistant.", quality: str = None):
         """
         Initialize the Ollama client.
         
@@ -19,13 +19,15 @@ class OllamaClient:
             base_url: Base URL for the Ollama API
             model: Ollama model to use
             system_prompt: The system prompt to guide the AI model
+            quality: Quality setting for models that support it (e.g., 'high', 'medium', 'low' for gpt-oss:latest)
         """
         self.base_url = base_url
         self.model = model
         self.system_prompt = system_prompt
+        self.quality = quality
         self.ollama_sdk_client = ollama.Client(host=self.base_url)
     
-    def generate_text(self, prompt: str, max_tokens: int = 300, 
+    def generate_text(self, prompt: str, max_tokens: int = 2048, 
                       temperature: float = 0.1, top_p: float = 0.1, 
                       top_k: int = 20, presence_penalty: float = 0.1,
                       frequency_penalty: float = 0.1) -> str:
@@ -55,18 +57,24 @@ class OllamaClient:
             cleaned_prompt = " ".join(prompt.replace("\n", " ").split())
             
             # Prepare generation parameters
+            options = {
+                "num_predict": max_tokens,
+                "temperature": temperature,
+                "top_p": top_p,
+                "top_k": top_k,
+                "presence_penalty": presence_penalty,
+                "frequency_penalty": frequency_penalty,
+            }
+            
+            # Add quality parameter if specified (for models like gpt-oss:latest)
+            if self.quality:
+                options["quality"] = self.quality
+            
             params = {
                 "model": self.model,
                 "prompt": cleaned_prompt,
                 "system": self.system_prompt,
-                "options": {
-                    "num_predict": max_tokens,
-                    "temperature": temperature,
-                    "top_p": top_p,
-                    "top_k": top_k,
-                    "presence_penalty": presence_penalty,
-                    "frequency_penalty": frequency_penalty,
-                }
+                "options": options
             }
             
             # Using ollama library for streaming generation
@@ -153,6 +161,8 @@ class OllamaClient:
     
     def _clean_response(self, text: str) -> str:
         """Remove thinking tags and other unwanted elements from the response."""
+        original_text = text
+        
         # Remove <think>...</think> tags and their content
         text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
         
@@ -162,5 +172,14 @@ class OllamaClient:
         # Clean up any extra whitespace that might be left
         text = re.sub(r'\n\s*\n', '\n\n', text)  # Replace multiple newlines with double newlines
         text = text.strip()
+        
+        # Fallback: if cleaning removed everything (model put answer inside think tags),
+        # extract the last sentence/paragraph from the think block as the actual answer
+        if not text and original_text.strip():
+            think_content = re.search(r'<think>(.*?)</think>', original_text, flags=re.DOTALL | re.IGNORECASE)
+            if think_content:
+                # Take only the last non-empty paragraph — that's typically the final answer
+                paragraphs = [p.strip() for p in think_content.group(1).split('\n') if p.strip()]
+                text = paragraphs[-1] if paragraphs else original_text.strip()
         
         return text
