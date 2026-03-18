@@ -1,5 +1,9 @@
 # Python
 .venv/
+.env
 __pycache__/
 *.py[cod]
 output/
+
+# Text file
+prompt

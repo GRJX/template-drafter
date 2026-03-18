@@ -8,9 +8,9 @@
             "name": "Python Debugger: CLI",
             "type": "debugpy",
             "request": "launch",
-            "program": "cli.py",
+            "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["Notion of Todoist voor productief werken", "--type", "story"]
+            "args": []
         }
     ]
 }
